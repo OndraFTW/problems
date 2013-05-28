@@ -21,7 +21,9 @@ defmodule Problems do
     # sorts list
     def sort(list), do: sort list, &1<&2
     def sort([], _), do: []
-    def sort([pivot|list], func), do: sort(filter(list, fn(e)->func.(e, pivot)end), func)++[pivot|sort(filter(list, fn(e)->not func.(e, pivot)end), func)]
+    def sort([pivot|list], func),
+        do: sort(filter(list, fn(e)->func.(e, pivot)end), func)++
+            [pivot|sort(filter(list, fn(e)->not func.(e, pivot)end), func)]
 
     # applies function func to every element in list and returns list of elements, for whom function func returned true
     def filter(list, func), do: filter list, func, []
@@ -77,8 +79,10 @@ defmodule Problems do
     def pack(list), do: pack list, [], []
     defp pack([], repetition, result), do: reverse [repetition|result]
     defp pack([head|tail], [], result),  do: pack tail, [head], result
-    defp pack([head|tail], [repetition_head|repetition_tail], result) when head==repetition_head, do: pack tail, [head, repetition_head|repetition_tail], result
-    defp pack([head|tail], [repetition_head|repetition_tail], result), do: pack tail, [head], [[repetition_head|repetition_tail]|result]
+    defp pack([head|tail], [repetition_head|repetition_tail], result) when head==repetition_head,
+        do: pack tail, [head, repetition_head|repetition_tail], result
+    defp pack([head|tail], [repetition_head|repetition_tail], result),
+        do: pack tail, [head], [[repetition_head|repetition_tail]|result]
 
     # 10 compress repeating elements into tuples {element, repetition}
     def compress_pack(list), do: map pack(list), fn([head|tail])-> {length(tail)+1, head} end 
@@ -86,11 +90,15 @@ defmodule Problems do
     # 11 compress repeating elements into tuples {element, repetition}, except for repetition 1
     def compress_pack2(list), do: map pack(list), fn([head|tail])-> compress_element(head, length(tail)+1) end 
 
-    # 12 compress repeating elements into tuples {element, repetition}, except for repetition 1, withou use of function pack/1
+    # 12 compress repeating elements into tuples {element, repetition}, except for repetition 1,
+    # withou use of function pack/1
     def compress(list), do: compress list, 0, []
-    defp compress([head], number_of_repetitions, result), do: reverse [compress_element(head, number_of_repetitions+1)|result]
-    defp compress([first, first|tail], number_of_repetitions, result), do: compress [first|tail], number_of_repetitions+1, result
-    defp compress([first, second|tail], number_of_repetitions, result), do: compress [second|tail], 0, [compress_element(first, number_of_repetitions+1)|result]
+    defp compress([head], number_of_repetitions, result),
+        do: reverse [compress_element(head, number_of_repetitions+1)|result]
+    defp compress([first, first|tail], number_of_repetitions, result),
+        do: compress [first|tail], number_of_repetitions+1, result
+    defp compress([first, second|tail], number_of_repetitions, result),
+        do: compress [second|tail], 0, [compress_element(first, number_of_repetitions+1)|result]
 
     defp compress_element(element, 1), do: element
     defp compress_element(element, number_of_repetitions), do: {number_of_repetitions, element}
@@ -115,7 +123,8 @@ defmodule Problems do
     def replicate(list, number), do: replicate list, number, number, []
     defp replicate([], _, _, result), do: reverse result
     defp replicate([head|tail], 1, number, result), do: replicate tail, number, number, [head|result]
-    defp replicate([head|tail], repeat_head, number, result), do: replicate [head|tail], repeat_head-1, number, [head|result]
+    defp replicate([head|tail], repeat_head, number, result),
+        do: replicate [head|tail], repeat_head-1, number, [head|result]
 
     # 16 drop every number-th element in list
     def drop(list, number) when number>=1, do: drop list, number, number, []
@@ -211,7 +220,8 @@ defmodule Problems do
 
     def sieve_of_eratosthenes(number), do: sieve_of_eratosthenes range(2, number), []
     defp sieve_of_eratosthenes([], result), do: reverse result
-    defp sieve_of_eratosthenes([head|tail], result), do: sieve_of_eratosthenes filter(tail, fn(e)-> rem(e, head)!=0 end), [head|result]
+    defp sieve_of_eratosthenes([head|tail], result),
+        do: sieve_of_eratosthenes filter(tail, fn(e)-> rem(e, head)!=0 end), [head|result]
 
     # 32 get greatest common divisor of integers a and b
     def gcd(a, 0), do: a
@@ -309,7 +319,10 @@ defmodule Problems do
 
     # 46 get truth table to given function func
     def table2(func) do
-        [{true, true, func.(true, true)},{true, false, func.(true, false)},{false, true, func.(false, true)},{false, false, func.(false, false)}]
+        [{true, true, func.(true, true)},
+        {true, false, func.(true, false)},
+        {false, true, func.(false, true)},
+        {false, false, func.(false, false)}]
     end
 
     # 47, 48
