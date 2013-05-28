@@ -3,22 +3,27 @@ defmodule Problems do
 
     # miscellaneous functions
 
+    # get a raised to the power of b
     def pow(a, b), do: pow a, b, 1
     defp pow(_, 0, result), do: result
     defp pow(a, b, result), do: pow a, b-1, result*a
 
+    # aplies function func to every element in list and returns list of returned values
     def map(list, func), do: map(list, func, [])
     defp map([], _, result), do: reverse result
     defp map([head|tail], func, result), do: map tail, func, [func.(head)|result]
 
+    # aplies function func to every element in list and returns concatenated returned values
     def conmap(list, func), do: conmap list, func, []
     defp conmap([], _, result), do: reverse result
     defp conmap([head|tail], func, result), do: conmap(tail, func, func.(head)++result)
 
+    # sorts list
     def sort(list), do: sort list, &1<&2
     def sort([], _), do: []
     def sort([pivot|list], func), do: sort(filter(list, fn(e)->func.(e, pivot)end), func)++[pivot|sort(filter(list, fn(e)->not func.(e, pivot)end), func)]
 
+    # applies function func to every element in list and returns list of elements, for whom function func returned true
     def filter(list, func), do: filter list, func, []
     defp filter([], _, result), do: reverse result
     defp filter([head|tail], func, result) do
@@ -215,7 +220,7 @@ defmodule Problems do
     # 33 determine whether numbers a and b are coprimes
     def coprime(a, b), do: gcd(a, b)==1 
 
-    # 34 
+    # 34 implement Euler's totient function
     def totient_phi(1), do: 1
     def totient_phi(number), do: totient_phi(range(1, number-1), number, 0)
     defp totient_phi([], _, result), do: result
@@ -254,13 +259,14 @@ defmodule Problems do
         end
     end
 
-    # 37
+    # 37 same as 34
     def totient_phi2(1), do: 1
     def totient_phi2(number), do: totient_phi2 prime_factors_mult(number), 0
     defp totient_phi2([], result), do: result
     defp totient_phi2([{m, p}|tail], result), do: totient_phi2 tail, result+(p-1)*pow(p, (m-1))
 
-    # 38
+    # 38 compare 34 and 37
+    # skipped
 
     # 39 get prime numbers greater or equal than a and lesser or equal than b
     def primes_range(a, b) when a<=b, do: filter sieve_of_eratosthenes(b), &1>=a
@@ -306,11 +312,10 @@ defmodule Problems do
         [{true, true, func.(true, true)},{true, false, func.(true, false)},{false, true, func.(false, true)},{false, false, func.(false, false)}]
     end
 
-    # 47
+    # 47, 48
+    # skipped
 
-    # 48
-
-    # 49
+    # 49 get n-ary Gray code - list of binary numbers (n bits long), where two succesive values differ in one bit
     def gray(1), do: ["0", "1"]
     def gray(n) when n>1 do
         left=gray n-1
