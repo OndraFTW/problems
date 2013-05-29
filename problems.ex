@@ -8,12 +8,12 @@ defmodule Problems do
     defp pow(_, 0, result), do: result
     defp pow(a, b, result), do: pow a, b-1, result*a
 
-    # aplies function func to every element in list and returns list of returned values
+    # aplies function func on every element in list and returns list of returned values
     def map(list, func), do: map(list, func, [])
     defp map([], _, result), do: reverse result
     defp map([head|tail], func, result), do: map tail, func, [func.(head)|result]
 
-    # aplies function func to every element in list and returns concatenated returned values
+    # aplies function func on every element in list and returns concatenated returned values
     def conmap(list, func), do: conmap list, func, []
     defp conmap([], _, result), do: reverse result
     defp conmap([head|tail], func, result), do: conmap(tail, func, func.(head)++result)
@@ -25,7 +25,7 @@ defmodule Problems do
         do: sort(filter(list, fn(e)->func.(e, pivot)end), func)++
             [pivot|sort(filter(list, fn(e)->not func.(e, pivot)end), func)]
 
-    # applies function func to every element in list and returns list of elements, for whom function func returned true
+    # applies function func on every element in list and returns list of elements, for whom function func returned true
     def filter(list, func), do: filter list, func, []
     defp filter([], _, result), do: reverse result
     defp filter([head|tail], func, result) do
@@ -34,6 +34,11 @@ defmodule Problems do
         else
             filter tail, func, result
         end
+    end
+    
+    # determines whether n is even
+    defmacro is_even(n) do
+        quote do: rem(unquote(n), 2)==0
     end
 
     # 01 get last element of list 
@@ -335,5 +340,93 @@ defmodule Problems do
         right=reverse left
         map(left, "0"<>&1)++map(right, "1"<>&1)
     end
+
+    # 50 skipped
+
+    # 54 is tree
+    def is_tree(nil), do: true
+    def is_tree({_, left, right}), do: is_tree(left) and is_tree(right)
+    def is_tree(_), do: false
+
+    #tail-call recursive
+    def is_tree2(tree), do: is_tree22 [tree]
+    defp is_tree22([]), do: true
+    defp is_tree22([nil|tail]), do: is_tree22 tail
+    defp is_tree22([{_, left, right}|tail]), do: is_tree22 [left, right|tail]
+    defp is_tree22(_), do: false
+
+    # 55 construct completely balanced tree with n nodes
+    def cbal_tree(0), do: nil
+    def cbal_tree(n) when is_even(n), do: {:X, cbal_tree(div((n-1), 2)+1), cbal_tree(div((n-1), 2))}
+    def cbal_tree(n), do: {:X, cbal_tree(div((n-1), 2)), cbal_tree(div((n-1), 2))}
+
+    # 56 determine whether tree is symetric
+    def is_symetric(nil), do: true
+    def is_symetric({_, left, right}), do: mirror left, right
+    defp mirror(nil, nil), do: true
+    defp mirror({_, left1, right1}, {_, left2, right2}), do: mirror(left1, right2) and mirror(right1, left2)
+    defp mirror(_, _), do: false
+
+    #tail-call recursive
+    def is_symetric2(nil), do: true
+    def is_symetric2({_, left, right}), do: mirror2 [left], [right]
+    defp mirror2([], []), do: true
+    defp mirror2([nil|left_tail], [nil|right_tail]), do: mirror2 left_tail, right_tail
+    defp mirror2([{_, left1, left2}|left_tail],[{_, right1, right2}|right_tail]),
+        do: mirror2 [left1, left2|left_tail], [right2, right1|right_tail]
+    defp mirror2(_, _), do: false
+
+    # 57 construct binary search tree from list
+    def construct([]), do: nil
+    def construct([head|tail]), do: construct tail, {head, nil, nil}
+    defp construct([], tree), do: tree
+    defp construct([head|tail], tree), do: construct tail, add_node_to_tree(tree, head)
+
+    defp add_node_to_tree(nil, node), do: {node, nil, nil}
+    defp add_node_to_tree({n, left, right}, node) when node<=n, do: {n, add_node_to_tree(left, node), right}
+    defp add_node_to_tree({n, left, right}, node), do: {n, left, add_node_to_tree(right, node)}
+
+    # 58 generate all binary trees with n nodes
+    def trees(0), do: [nil]
+    def trees(n) when n>0 do
+        uconmap trees(n-1), get_one_node_plus_trees(&1)
+    end
+
+    # returns all trees created by adding one node to tree
+    def get_one_node_plus_trees(tree),
+        do: map get_new_nodes_paths(tree), fn(path)-> apply_new_node_path_on_tree(tree, path) end
+
+    # add node to tree according to new node path
+    def apply_new_node_path_on_tree(nil, []), do: {:a, nil, nil}
+    def apply_new_node_path_on_tree({a, left, right}, [head|tail]) do
+        if head == :l do
+            {a, apply_new_node_path_on_tree(left, tail), right}
+        else
+            {a, left, apply_new_node_path_on_tree(right, tail)}
+        end
+    end
+
+    # aplies function func on every element in list and returns concatenated returned values,
+    # repeating values are eliminated
+    def uconmap(list, func), do: uconmap list, func, []
+    def uconmap([], _, result), do: result
+    def uconmap([head|tail], func, result), do: uconmap tail, func, unique_concatenation(result, func.(head))
+
+    # returns all new node paths - paths to potentional new nodes
+    def get_new_nodes_paths(tree), do: get_new_nodes_paths tree, [], []
+    def get_new_nodes_paths(nil, path, result), do: [reverse(path)|result]
+    def get_new_nodes_paths({_, left, right}, path, result) do
+        result2=get_new_nodes_paths left, [:l|path], result
+        get_new_nodes_paths right, [:r|path], result2
+    end
+
+    # concatenates two lists and eliminates values that are in both lists 
+    def unique_concatenation(list1, []), do: list1
+    def unique_concatenation(list1, [head|tail]), do: unique_concatenation add_if_unique(list1, head), tail
+
+    # adds item into list if item isn't in this list
+    def add_if_unique([], item), do: [item]
+    def add_if_unique([head|tail], item) when head==item, do: [head|tail]
+    def add_if_unique([head|tail], item), do: [head|add_if_unique(tail, item)]
 
 end
