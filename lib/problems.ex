@@ -386,7 +386,7 @@ defmodule Problems do
     defp add_node_to_tree({n, left, right}, node) when node<=n, do: {n, add_node_to_tree(left, node), right}
     defp add_node_to_tree({n, left, right}, node), do: {n, left, add_node_to_tree(right, node)}
 
-    # 58 generate all binary trees with n nodes
+    # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
         uconmap trees(n-1), get_one_node_plus_trees(&1)
