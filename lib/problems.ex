@@ -369,7 +369,7 @@ defmodule Problems do
         end
     end
     
-    # constructs all trees with left subtree from lefts ans right subtree from rights
+    # constructs all trees with left subtree from left_subtrees ans right subtree from right_subtrees
     def construct_trees(left_subtrees, right_subtrees),
         do: conmap left_subtrees, fn(left)-> map(right_subtrees, {:x, left, &1}) end
 
@@ -398,6 +398,9 @@ defmodule Problems do
     defp add_node_to_tree(nil, node), do: {node, nil, nil}
     defp add_node_to_tree({n, left, right}, node) when node<=n, do: {n, add_node_to_tree(left, node), right}
     defp add_node_to_tree({n, left, right}, node), do: {n, left, add_node_to_tree(right, node)}
+
+    # 58 generate all symetric completely balanced trees with n nodes
+    def sym_cbal_trees(n), do: filter cbal_trees(n), is_symetric(&1)
 
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
