@@ -355,10 +355,23 @@ defmodule Problems do
     defp is_tree22([{_, left, right}|tail]), do: is_tree22 [left, right|tail]
     defp is_tree22(_), do: false
 
-    # 55 construct completely balanced tree with n nodes
-    def cbal_tree(0), do: nil
-    def cbal_tree(n) when is_even(n), do: {:X, cbal_tree(div((n-1), 2)+1), cbal_tree(div((n-1), 2))}
-    def cbal_tree(n), do: {:X, cbal_tree(div((n-1), 2)), cbal_tree(div((n-1), 2))}
+    # 55 construct all completely balanced trees with n nodes
+    def cbal_trees(0), do: [nil]
+    def cbal_trees(1), do: [{:x, nil, nil}]
+    def cbal_trees(n) do
+        if is_even(n-1) do
+            trees=cbal_trees(div(n-1,2))
+            construct_trees trees, trees
+        else
+            trees0=cbal_trees(div(n-1,2))
+            trees1=cbal_trees(div(n-1,2)+1)
+            construct_trees(trees0, trees1)++construct_trees(trees1, trees0)
+        end
+    end
+    
+    # constructs all trees with left subtree from lefts ans right subtree from rights
+    def construct_trees(left_subtrees, right_subtrees),
+        do: conmap left_subtrees, fn(left)-> map(right_subtrees, {:x, left, &1}) end
 
     # 56 determine whether tree is symetric
     def is_symetric(nil), do: true
