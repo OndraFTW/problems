@@ -358,7 +358,7 @@ defmodule Problems do
     # 55 construct all completely balanced trees with n nodes
     def cbal_trees(0), do: [nil]
     def cbal_trees(1), do: [{:x, nil, nil}]
-    def cbal_trees(n) do
+    def cbal_trees(n) when n>1 do
         if is_even(n-1) do
             trees=cbal_trees(div(n-1,2))
             construct_trees trees, trees
@@ -401,6 +401,43 @@ defmodule Problems do
 
     # 58 generate all symetric completely balanced trees with n nodes
     def sym_cbal_trees(n), do: filter cbal_trees(n), is_symetric(&1)
+
+    # 59 generate all height balanced trees with n nodes
+    def hbal_trees(n), do: filter height_trees(n), is_height_balanced(&1)
+
+    # determines whether tree is height balanced
+    defp is_height_balanced(nil), do: true
+    defp is_height_balanced(tree) do
+        try do
+            balance(tree)
+            true
+        catch
+            :isnt_balanced->false
+        end
+    end
+
+    # returns height of tree if tree is balanced otherwise throws :isnt_balanced
+    defp balance(nil), do: 0
+    defp balance({_, left, right}) do
+        left_balance=balance(left)
+        right_balance=balance(right)
+        if abs(left_balance-right_balance)>1 do
+            throw :isnt_balanced
+        else
+            max(right_balance, left_balance)+1
+        end
+    end
+
+    # returns all trees with height n
+    def height_trees(n) do
+        {result, _}=height_trees_helper(n)
+        result
+    end
+    def height_trees_helper(0), do: {[{:h, nil, nil}], [nil]}
+    def height_trees_helper(n) when n>0 do
+        {subtrees_e, subtrees_l}=height_trees_helper(n-1)
+        {construct_trees(subtrees_e, subtrees_l)++construct_trees(subtrees_l, subtrees_e)++construct_trees(subtrees_e, subtrees_e), subtrees_l++construct_trees(subtrees_l, subtrees_l)}
+    end
 
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
