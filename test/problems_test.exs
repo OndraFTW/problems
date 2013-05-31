@@ -34,4 +34,16 @@ defmodule ProblemsTest do
   test "is -2 even", do: assert is_even(-2)
   test "is 1 even", do: assert not is_even(1)
 
+  test "last of one", do: assert last([1])==1
+  test "last of list", do: assert last([1,2,3])==3
+
+  test "last but one of two", do: assert but_last([1,2])==1
+  test "last but one of list", do: assert but_last([1,2,3,5,6])==5
+
+  test "0th element", do: assert kth([1],0)
+  test "2nd element", do: assert kth([1,2,3,4,5],2)
+
+  test "length of empty list", do: assert len([])==0
+  test "lengrh of non-empty list", do: assert len([1,2,3])==3
+
 end
