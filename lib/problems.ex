@@ -429,12 +429,12 @@ defmodule Problems do
     end
 
     # returns all trees with height n
-    def height_trees(n) do
+    defp height_trees(n) do
         {result, _}=height_trees_helper(n)
         result
     end
-    def height_trees_helper(0), do: {[{:h, nil, nil}], [nil]}
-    def height_trees_helper(n) when n>0 do
+    defp height_trees_helper(0), do: {[{:h, nil, nil}], [nil]}
+    defp height_trees_helper(n) when n>0 do
         {subtrees_e, subtrees_l}=height_trees_helper(n-1)
         {construct_trees(subtrees_e, subtrees_l)++construct_trees(subtrees_l, subtrees_e)++construct_trees(subtrees_e, subtrees_e), subtrees_l++construct_trees(subtrees_l, subtrees_l)}
     end
@@ -448,18 +448,18 @@ defmodule Problems do
     end
 
     # return number of nodes in tree
-    def number_of_nodes(nil), do: 0
-    def number_of_nodes({_, left, right}), do: number_of_nodes(left)+number_of_nodes(right)+1
+    defp number_of_nodes(nil), do: 0
+    defp number_of_nodes({_, left, right}), do: number_of_nodes(left)+number_of_nodes(right)+1
 
     # returns minimum number of nodes needed to construct hight balanced tree with height h
-    def min_nodes(0), do: 1
-    def min_nodes(1), do: 2
-    def min_nodes(h) when h>1, do: min_nodes(h-1)+min_nodes(h-2)+1
+    defp min_nodes(0), do: 1
+    defp min_nodes(1), do: 2
+    defp min_nodes(h) when h>1, do: min_nodes(h-1)+min_nodes(h-2)+1
 
     # returns maximum height of height balanced tree with n nodes
-    def max_height(n), do: max_height n, 0
-    def max_height(1, _), do: 0
-    def max_height(n, h) do
+    defp max_height(n), do: max_height n, 0
+    defp max_height(1, _), do: 0
+    defp max_height(n, h) do
         nodes=min_nodes(h)
         cond do
             nodes>n->h-1
@@ -469,11 +469,11 @@ defmodule Problems do
     end
 
     # returns maximum number of nodes needed to construct hight balanced tree with height h
-    def max_nodes(h), do: pow(2, h+1)-1
+    defp max_nodes(h), do: pow(2, h+1)-1
 
     # return minimum height of height balanced tree with n nodes
-    def min_height(n), do: min_height n, 0
-    def min_height(n, h) do
+    defp min_height(n), do: min_height n, 0
+    defp min_height(n, h) do
         nodes=max_nodes(h)
         if nodes<n do
             min_height(n, h+1)
@@ -482,16 +482,28 @@ defmodule Problems do
         end
     end
 
-    # 64 compute number of leaves
-    def leaves(nil), do: 0
-    def leaves({_, nil, nil}), do: 1
-    def leaves({_, left, right}), do: leaves(left)+leaves(right)
+    # 61 compute number of leaves
+    def number_of_leaves(nil), do: 0
+    def number_of_leaves({_, nil, nil}), do: 1
+    def number_of_leaves({_, left, right}), do: number_of_leaves(left)+number_of_leaves(right)
 
     #tail-call recursive
-    def leaves2(tree), do: leaves2 [tree], 0
+    def number_of_leaves2(tree), do: number_of_leaves2 [tree], 0
+    defp number_of_leaves2([], result), do: result
+    defp number_of_leaves2([nil|tail], result), do: number_of_leaves2 tail, result
+    defp number_of_leaves2([{_, nil, nil}|tail], result), do: number_of_leaves2 tail, result+1
+    defp number_of_leaves2([{_, left, right}|tail], result), do: number_of_leaves2 [left,right|tail], result
+
+    # 62 collect all leaves
+    def leaves(nil), do: []
+    def leaves({data, nil, nil}), do: [{data, nil, nil}]
+    def leaves({_, left, right}), do: leaves(left)++leaves(right)
+
+    # tail-call recursive
+    def leaves2(tree), do: leaves2 [tree], []
     defp leaves2([], result), do: result
     defp leaves2([nil|tail], result), do: leaves2 tail, result
-    defp leaves2([{_, nil, nil}|tail], result), do: leaves2 tail, result+1
+    defp leaves2([{data, nil, nil}|tail], result), do: leaves2 tail, [{data, nil, nil}|result]
     defp leaves2([{_, left, right}|tail], result), do: leaves2 [left,right|tail], result
 
     # 74 generate all binary trees with n nodes
