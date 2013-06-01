@@ -482,6 +482,18 @@ defmodule Problems do
         end
     end
 
+    # 64 compute number of leaves
+    def leaves(nil), do: 0
+    def leaves({_, nil, nil}), do: 1
+    def leaves({_, left, right}), do: leaves(left)+leaves(right)
+
+    #tail-call recursive
+    def leaves2(tree), do: leaves2 [tree], 0
+    defp leaves2([], result), do: result
+    defp leaves2([nil|tail], result), do: leaves2 tail, result
+    defp leaves2([{_, nil, nil}|tail], result), do: leaves2 tail, result+1
+    defp leaves2([{_, left, right}|tail], result), do: leaves2 [left,right|tail], result
+
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
