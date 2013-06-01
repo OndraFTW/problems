@@ -402,8 +402,8 @@ defmodule Problems do
     # 58 generate all symetric completely balanced trees with n nodes
     def sym_cbal_trees(n), do: filter cbal_trees(n), is_symetric(&1)
 
-    # 59 generate all height balanced trees with n nodes
-    def hbal_trees(n), do: filter height_trees(n), is_height_balanced(&1)
+    # 59 generate all height balanced trees with heiht h
+    def hbal_trees(h), do: filter height_trees(h), is_height_balanced(&1)
 
     # determines whether tree is height balanced
     defp is_height_balanced(nil), do: true
@@ -437,6 +437,49 @@ defmodule Problems do
     def height_trees_helper(n) when n>0 do
         {subtrees_e, subtrees_l}=height_trees_helper(n-1)
         {construct_trees(subtrees_e, subtrees_l)++construct_trees(subtrees_l, subtrees_e)++construct_trees(subtrees_e, subtrees_e), subtrees_l++construct_trees(subtrees_l, subtrees_l)}
+    end
+
+    # 60 generate all height balanced trees with n nodes
+    def hbal_trees_nodes(0), do: nil
+    def hbal_trees_nodes(n) do
+        min=min_height(n)
+        max=max_height(n)
+        filter conmap(range(min, max), fn(h)-> hbal_trees(h) end), fn(e)->number_of_nodes(e)==n end
+    end
+
+    # return number of nodes in tree
+    def number_of_nodes(nil), do: 0
+    def number_of_nodes({_, left, right}), do: number_of_nodes(left)+number_of_nodes(right)+1
+
+    # returns minimum number of nodes needed to construct hight balanced tree with height h
+    def min_nodes(0), do: 1
+    def min_nodes(1), do: 2
+    def min_nodes(h) when h>1, do: min_nodes(h-1)+min_nodes(h-2)+1
+
+    # returns maximum height of height balanced tree with n nodes
+    def max_height(n), do: max_height n, 0
+    def max_height(1, _), do: 0
+    def max_height(n, h) do
+        nodes=min_nodes(h)
+        cond do
+            nodes>n->h-1
+            nodes==n->h
+            nodes<n->max_height(n, h+1)
+        end
+    end
+
+    # returns maximum number of nodes needed to construct hight balanced tree with height h
+    def max_nodes(h), do: pow(2, h+1)-1
+
+    # return minimum height of height balanced tree with n nodes
+    def min_height(n), do: min_height n, 0
+    def min_height(n, h) do
+        nodes=max_nodes(h)
+        if nodes<n do
+            min_height(n, h+1)
+        else
+            h
+        end
     end
 
     # 74 generate all binary trees with n nodes
