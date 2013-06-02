@@ -44,6 +44,14 @@ defmodule ProblemsTest do
   test "2nd element", do: assert kth([1,2,3,4,5],2)
 
   test "length of empty list", do: assert len([])==0
-  test "lengrh of non-empty list", do: assert len([1,2,3])==3
+  test "length of non-empty list", do: assert len([1,2,3])==3
+
+  test "reverse empty list", do: assert reverse([])==[]
+  test "reverse non-empty list", do: assert reverse([1,2,3])==[3,2,1]
+
+  test "if is empty list palindrom", do: assert is_palindrom([])
+  test "if is odd list palindrom", do: assert is_palindrom([1,2,1])
+  test "if is even list palindrom", do: assert is_palindrom([1,2,2,1])
+  test "if isnt palindrom", do: assert not is_palindrom([1,2,3])
 
 end
