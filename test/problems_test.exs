@@ -54,4 +54,10 @@ defmodule ProblemsTest do
   test "if is even list palindrom", do: assert is_palindrom([1,2,2,1])
   test "if isnt palindrom", do: assert not is_palindrom([1,2,3])
 
+  test "flatten empty list", do: assert flatten([])==[]
+  test "flatten first element", do: assert flatten([[1,2],3])==[1,2,3]
+  test "flatten last element", do: assert flatten([1,2,3,[4,5]])==[1,2,3,4,5]
+  test "flatten inside", do: assert flatten([1,2,[3,4,5],6])==[1,2,3,4,5,6]
+  test "flatten more layers", do: assert flatten([1,[2,[3,4]],5,6])
+
 end
