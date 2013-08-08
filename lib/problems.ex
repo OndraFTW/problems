@@ -290,8 +290,8 @@ defmodule Problems do
     def goldbach(number) when rem(number, 2)==0 do
         primes=sieve_of_eratosthenes(number)
         number_half=number/2
-        left=filter primes, &1<=number_half
-        right=filter primes, &1>=number_half
+        left=filter primes, fn(x)-> x<=number_half end
+        right=filter primes, fn(x)-> x>=number_half end
         goldbach left, 0, right, length(right)-1, number
     end
     defp goldbach(left, a, right, -1, number), do: goldbach(left, a+1, right, length(right)-1, number)
@@ -338,7 +338,7 @@ defmodule Problems do
     def gray(n) when n>1 do
         left=gray n-1
         right=reverse left
-        map(left, "0"<>&1)++map(right, "1"<>&1)
+        map(left, fn(x)-> "0"<>x end)++map(right, fn(x)-> "1"<>x end)
     end
 
     # 50 skipped
@@ -371,7 +371,7 @@ defmodule Problems do
     
     # constructs all trees with left subtree from left_subtrees ans right subtree from right_subtrees
     def construct_trees(left_subtrees, right_subtrees),
-        do: conmap(left_subtrees, fn(left)-> map(right_subtrees, {:x, left, &1}) end)
+        do: conmap(left_subtrees, fn(left)-> map(right_subtrees, {:x, left, fn(x)-> x end}) end)
 
     # 56 determine whether tree is symetric
     def is_symetric(nil), do: true
@@ -400,10 +400,10 @@ defmodule Problems do
     defp add_node_to_tree({n, left, right}, node), do: {n, left, add_node_to_tree(right, node)}
 
     # 58 generate all symetric completely balanced trees with n nodes
-    def sym_cbal_trees(n), do: filter(cbal_trees(n), is_symetric(&1))
+    def sym_cbal_trees(n), do: filter(cbal_trees(n), fn(x)->is_symetric(x)end)
 
     # 59 generate all height balanced trees with heiht h
-    def hbal_trees(h), do: filter(height_trees(h), is_height_balanced(&1))
+    def hbal_trees(h), do: filter(height_trees(h), fn(x)->is_height_balanced(x)end)
 
     # determines whether tree is height balanced
     defp is_height_balanced(nil), do: true
@@ -509,7 +509,7 @@ defmodule Problems do
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
-        uconmap(trees(n-1), get_one_node_plus_trees(&1))
+        uconmap(trees(n-1), fn(x)->get_one_node_plus_trees(x)end)
     end
 
     # returns all trees created by adding one node to tree
