@@ -60,4 +60,13 @@ defmodule ProblemsTest do
   test "flatten inside", do: assert flatten([1,2,[3,4,5],6])==[1,2,3,4,5,6]
   test "flatten more layers", do: assert flatten([1,[2,[3,4]],5,6])
 
+  test "delete repetition in empty list", do: assert delete_repetition([])==[]
+  test "delete repetition in list with one element", do: assert delete_repetition([1])==[1]
+  test "delete repetition in list of two repeating elements", do: assert delete_repetition([1,1])==[1]
+  test "delete repetition in list of nonrepeating elements", do: assert delete_repetition([1,2,3])==[1,2,3]
+  test "delete multiple repetition in list", do: assert delete_repetition([1,1,1,1])==[1]
+  test "delete repetition in the beggining of list", do: assert delete_repetition([1,1,2,3])==[1,2,3]
+  test "delete repetition in the middle of list", do: assert delete_repetition([1,2,2,3])==[1,2,3]
+  test "delete repetition in the end of list", do: assert delete_repetition([1,2,3,3])==[1,2,3]
+
 end

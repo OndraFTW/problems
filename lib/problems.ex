@@ -74,8 +74,9 @@ defmodule Problems do
     def flatten([head|tail]) when is_list(head), do: flatten(head)++flatten(tail)
     def flatten([head|tail]), do: [head|flatten(tail)]
 
-    # 08 delete repeating elements
+    # 08 delete consecutive repeating elements
     def delete_repetition(list), do: delete_repetition(list, [])
+    defp delete_repetition([], result), do: reverse(result)
     defp delete_repetition([head], result), do: reverse ([head|result])
     defp delete_repetition([first, first|tail], result), do: delete_repetition([first|tail], result)
     defp delete_repetition([first, second|tail], result), do: delete_repetition([second|tail], [first|result])
