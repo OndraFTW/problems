@@ -12,22 +12,22 @@ defmodule ProblemsTest do
   test "5 to the power of two", do: assert pow(5, 2)==25
 
   test "map empty list", do: assert map([], fn(a)-> a end)==[]
-  test "double every element in list", do: assert map([1,2,3], &1*2)==[2,4,6]
+  test "double every element in list", do: assert map([1,2,3], fn(x)-> x*2 end)==[2,4,6]
 
   test "conmap empty list", do: assert conmap([], fn(a)-> a end)==[]
-  test "conmap lists", do: assert conmap([1,2,3], [&1])==[1,2,3]
+  test "conmap lists", do: assert conmap([1,2,3], fn(x)-> [x] end)==[1,2,3]
 
   test "empty list", do: assert len([])==0
   test "non-empty list", do: assert len([1])==1
 
   test "sort empty list", do: assert sort([])==[]
   test "sort nonempty list", do: assert sort([3,1,2])==[1,2,3]
-  test "sort with function", do: assert sort([3,1,2], &1<&2)==[1,2,3]
-  test "sort backwards", do: assert sort([2,1,3], &1>&2)==[3,2,1]
+  test "sort with function", do: assert sort([3,1,2], fn(a, b)-> a<b end)==[1,2,3]
+  test "sort backwards", do: assert sort([2,1,3], fn(a, b)-> a>b end)==[3,2,1]
 
-  test "filter empty list", do: assert filter([], &1>1)==[]
-  test "filter above 1", do: assert filter([1,2,3], &1>1)==[2,3]
-  test "filter all", do: assert filter([0,0,0], &1==1)==[]
+  test "filter empty list", do: assert filter([], fn(x)-> x>1 end)==[]
+  test "filter above 1", do: assert filter([1,2,3], fn(x)-> x>1 end)==[2,3]
+  test "filter all", do: assert filter([0,0,0], fn(x)-> x==1 end)==[]
 
   test "is 0 even", do: assert is_even(0)
   test "is 4 even", do: assert is_even(4)
