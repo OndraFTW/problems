@@ -81,8 +81,9 @@ defmodule Problems do
     defp delete_repetition([first, first|tail], result), do: delete_repetition([first|tail], result)
     defp delete_repetition([first, second|tail], result), do: delete_repetition([second|tail], [first|result])
 
-    # 09 pack repeating elements into sublists
+    # 09 pack consecutive repeating elements into sublists
     def pack(list), do: pack(list, [], [])
+    defp pack([], [], []), do: []
     defp pack([], repetition, result), do: reverse([repetition|result])
     defp pack([head|tail], [], result),  do: pack(tail, [head], result)
     defp pack([head|tail], [repetition_head|repetition_tail], result) when head==repetition_head,
@@ -91,7 +92,7 @@ defmodule Problems do
         do: pack(tail, [head], [[repetition_head|repetition_tail]|result])
 
     # 10 compress repeating elements into tuples {element, repetition}
-    def compress_pack(list), do: map(pack(list), fn([head|tail])-> {length(tail)+1, head} end) 
+    def compress_pack(list), do: map(pack(list), fn([head|tail])-> {head, length(tail)+1} end) 
 
     # 11 compress repeating elements into tuples {element, repetition}, except for repetition 1
     def compress_pack2(list), do: map(pack(list), fn([head|tail])-> compress_element(head, length(tail)+1) end) 
@@ -99,6 +100,7 @@ defmodule Problems do
     # 12 compress repeating elements into tuples {element, repetition}, except for repetition 1,
     # withou use of function pack/1
     def compress(list), do: compress(list, 0, [])
+    defp compress([],0,[]), do: []
     defp compress([head], number_of_repetitions, result),
         do: reverse([compress_element(head, number_of_repetitions+1)|result])
     defp compress([first, first|tail], number_of_repetitions, result),
@@ -107,7 +109,7 @@ defmodule Problems do
         do: compress([second|tail], 0, [compress_element(first, number_of_repetitions+1)|result])
 
     defp compress_element(element, 1), do: element
-    defp compress_element(element, number_of_repetitions), do: {number_of_repetitions, element}
+    defp compress_element(element, number_of_repetitions), do: {element, number_of_repetitions}
 
     # 13 decompress repeating elements (see 10-12)
     def decompress(list), do: decompress(list, [])
