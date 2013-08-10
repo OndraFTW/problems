@@ -10,15 +10,19 @@ defmodule ProblemsTest do
   test "5 to the power of 0", do: assert pow(5, 0)==1
   test "5 to the power of one", do: assert pow(5, 1)==5
   test "5 to the power of two", do: assert pow(5, 2)==25
+  test "3 to the power of minus one", do: assert pow(3, -1)==1/3
+  test "3 to the power of minus two", do: assert pow(3, -2)==1/9
 
   test "map empty list", do: assert map([], fn(a)-> a end)==[]
   test "double every element in list", do: assert map([1,2,3], fn(x)-> x*2 end)==[2,4,6]
 
   test "conmap empty list", do: assert conmap([], fn(a)-> a end)==[]
+  test "conmap list of empty lists", do: assert conmap([[],[],[]], fn(x)-> x end)==[]
   test "conmap lists", do: assert conmap([1,2,3], fn(x)-> [x] end)==[1,2,3]
 
   test "empty list", do: assert len([])==0
-  test "non-empty list", do: assert len([1])==1
+  test "nonempty list", do: assert len([1])==1
+  test "longer nonempty list", do: assert len([1,2,3])==3
 
   test "sort empty list", do: assert sort([])==[]
   test "sort nonempty list", do: assert sort([3,1,2])==[1,2,3]
@@ -109,5 +113,44 @@ defmodule ProblemsTest do
   test "compress repetition (except for 1, without use of pack/1) in the middle of list", do: assert compress([1,2,2,3])==[1,{2,2},3]
   test "compress repetition (except for 1, without use of pack/1) in the end of list", do: assert compress([1,2,3,3])==[1,2,{3,2}]
   test "compress two repetition (except for 1, without use of pack/1) in one list", do: assert compress([1,1,2,2])==[{1,2},{2,2}]
+
+  test "decompress repetition in empty list", do: assert decompress([])==[]
+  test "decompress repetition in list with one element", do: assert decompress([1])==[1]
+  test "decompress repetition in list of two repeating elements", do: assert decompress([{1,2}])==[1,1]
+  test "decompress repetition  in list of nonrepeating elements", do: assert decompress([1,2,3])==[1,2,3]
+  test "decompress multiple repetition in list", do: assert decompress([{1,4}])==[1,1,1,1]
+  test "decompress repetition in the beggining of list", do: assert decompress([{1,2},2,3])==[1,1,2,3]
+  test "decompress repetition in the middle of list", do: assert decompress([1,{2,2},3])==[1,2,2,3]
+  test "decompress repetition in the end of list", do: assert decompress([1,2,{3,2}])==[1,2,3,3]
+  test "decompress two repetition in one list", do: assert decompress([{1,2},{2,2}])==[1,1,2,2]
+
+  test "duplicate empty list", do: assert duplicate([])==[]
+  test "duplicate list with one element", do: assert duplicate([1])==[1,1]
+  test "duplicate list with two elements", do: assert duplicate([1,2])==[1,1,2,2]
+  test "duplicate list with two equal elements", do: assert duplicate([1,1])==[1,1,1,1]
+  test "duplicate list with three equal elements", do: assert duplicate([1,1,1])==[1,1,1,1,1,1]
+
+  test "replicate empty list", do: assert replicate([], 1)==[]
+  test "replicate empty list zero-times", do: assert replicate([], 0)==[]
+  test "replicate nonempty list zero-times", do: assert replicate([1,1], 0)==[]
+  test "replicate nonempty list once", do: assert replicate([1,2], 1)==[1,2]
+  test "replicate nonempty list twice", do: assert replicate([1,2], 2)==[1,1,2,2]
+  test "replicate nonempty list with repeating elements", do: assert replicate([1,1,1], 3)==[1,1,1,1,1,1,1,1,1]
+  
+  test "drop from empty list", do: assert drop([], 2)==[]
+  test "drop from empty list every zeroth element", do: assert catch_error(drop([], 0))==:function_clause
+  test "drop from nonempty list every minus first element", do: assert catch_error(drop([1,2,3,4,5,6], -1))==:function_clause
+  test "drop from nonempty list every zeroth element", do: assert catch_error(drop([1,2,3,4,5,6], 0))==:function_clause
+  test "drop from nonempty list every first element", do: assert drop([1,2,3,4,5,6], 1)==[]
+  test "drop from nonempty list every second element", do: assert drop([1,2,3,4,5,6], 2)==[1,3,5]
+  test "drop from nonempty list every third element", do: assert drop([1,2,3,4,5,6], 3)==[1,2,4,5]
+
+  test "split empty list into empty lists", do: assert split([], 0)=={[], []}
+  test "split empty list into nonempty lists", do: assert catch_error(split([], 1))==:function_clause
+  test "split empty list into negative length list", do: assert catch_error(split([], -1))==:function_clause
+  test "split nonempty list into empty list", do: assert split([1,2], 0)=={[], [1,2]}
+  test "split nonempty list into longer list", do: assert catch_error(split([1,2], 3))==:function_clause
+  test "split nonempty list into negative length list", do: assert catch_error(split([1,2], -1))==:function_clause
+
 
 end

@@ -4,6 +4,7 @@ defmodule Problems do
     # miscellaneous functions
 
     # get a raised to the power of b
+    def pow(a, b) when b<0, do: 1/pow(a, -b, 1)
     def pow(a, b), do: pow(a, b, 1)
     defp pow(_, 0, result), do: result
     defp pow(a, b, result), do: pow(a, b-1, result*a)
@@ -116,10 +117,10 @@ defmodule Problems do
     defp decompress([], result), do: result
     defp decompress([head|tail], result), do: decompress(tail, result++decompress_element(head))
 
-    defp decompress_element({number, element}), do: decompress_element({number, element}, [])
+    defp decompress_element({element, number}), do: decompress_element({element, number}, [])
     defp decompress_element(element), do: [element]
-    defp decompress_element({1, element}, result), do: [element|result]
-    defp decompress_element({number, element}, result), do: decompress_element({number-1, element}, [element|result])
+    defp decompress_element({element, 1}, result), do: [element|result]
+    defp decompress_element({element, number}, result), do: decompress_element({element, number-1}, [element|result])
 
     # 14 duplicate every element in list
     def duplicate(list), do: duplicate(list, [])
@@ -141,7 +142,7 @@ defmodule Problems do
     defp drop([head|tail], to_drop, number, result), do: drop(tail, to_drop-1, number, [head|result])
 
     # 17 split list into two, len is length of first one
-    def split(list, len) when len>=0, do: split([], list, len)
+    def split(list, len) when length(list)>=len, do: split([], list, len)
     defp split(left, right, 0), do: {reverse(left), right}
     defp split(left, [middle|right], len), do: split([middle|left], right, len-1)
 
