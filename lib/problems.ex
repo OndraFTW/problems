@@ -146,13 +146,15 @@ defmodule Problems do
     defp split(left, right, 0), do: {reverse(left), right}
     defp split(left, [middle|right], len), do: split([middle|left], right, len-1)
 
-    # 18 get slice from list, a is index of first element of slice and b index of last
-    def slice(list, a, b) when a<=b and a>=0, do: slice(list, a, b, [])
-    defp slice([head|_], _, b,  result) when b<=0, do: reverse([head|result])
+    # 18 get slice from list, a is index of first element of slice and b index of last plus one
+    def slice(list, a, b) when a<=b and a>=0 and b<=length(list), do: slice(list, a, b, [])
+    defp slice(_, _, 0,  result), do: reverse(result)
     defp slice([head|tail], a, b, result) when a<=0, do: slice(tail, a-1, b-1, [head|result])
     defp slice([_|tail], a, b, result), do: slice(tail, a-1, b-1, result)
 
     # 19 rotate list left number-times
+    def rotate(list, 0), do: list
+    def rotate([], _), do: []
     def rotate(list, number) do
         number_adjusted=rem(number, length(list))
         {left, right}=split(list, number_adjusted)

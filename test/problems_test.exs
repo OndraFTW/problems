@@ -2,7 +2,7 @@ Code.require_file "../../lib/problems.ex", __FILE__
 ExUnit.start
 
 defmodule ProblemsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   import Problems
 
   # miscellaneous functions tests
@@ -152,5 +152,40 @@ defmodule ProblemsTest do
   test "split nonempty list into longer list", do: assert catch_error(split([1,2], 3))==:function_clause
   test "split nonempty list into negative length list", do: assert catch_error(split([1,2], -1))==:function_clause
 
+  test "slice empty list", do: assert slice([],0,0)==[]
+  test "slice list with negative first index", do: assert catch_error(slice([1],-1,1))==:function_clause
+  test "slice list with negative second index", do: assert catch_error(slice([1],1,-1))==:function_clause
+  test "slice list with negative indexes", do: assert catch_error(slice([1],-1,-1))==:function_clause
+  test "slice list with first index higher tahan second one", do: assert catch_error(slice([1,2],1,0))==:function_clause
+  test "slice list with out-of-range second index", do: assert catch_error(slice([1],0,3))==:function_clause
+  test "slice list with out-of-range indexes", do: assert catch_error(slice([1,2],3,4))==:function_clause
+  test "slice empty list in the beginning of nonempty list", do: assert slice([1,2,3],0,0)==[]
+  test "slice empty list in the end of nonempty list", do: assert slice([1,2,3],1,1)==[]
+  test "slice empty list in the middle of nonempty list", do: assert slice([1,2,3],2,2)==[]
+  test "slice in the beggining of list", do: assert slice([1,2,3,4,5,6],0,4)==[1,2,3,4]
+  test "slice in the middle of list", do: assert slice([1,2,3,4,5,6],1,5)==[2,3,4,5]
+  test "slice in the end of list", do: assert slice([1,2,3,4,5,6],2,6)==[3,4,5,6]
+
+  test "rotate empty list", do: assert rotate([], 1)==[]
+  test "rotate zero-times", do: assert rotate([1,2,3],0)==[1,2,3]
+  test "rotate once", do: assert rotate([1,2,3], 1)==[2,3,1]
+  test "rotate length(list) times", do: assert rotate([1,2,3],3)==[1,2,3]
+  test "rotate more times than length(list)", do: assert rotate([1,2,3],4)==[2,3,1]
+  test "rotate negative times", do: assert catch_error(rotate([1,2,3],-1))==:function_clause
+
+  test "remove element from empty list", do: assert catch_error(remove([], 1))==:function_clause
+  test "remove element with negative index", do: assert catch_error(remove([1,2,3], -1))==:function_clause
+  test "remove out-of-range element", do: assert catch_error(remove([1,2,3], 3))==:function_clause
+  test "remove first element", do: assert remove([1,2,3], 0)==[2,3]
+  test "remove middle element", do: assert remove([1,2,3], 1)==[1,3]
+  test "remove last element", do: assert remove([1,2,3], 2)==[1,2]
+
+  test "insert element into empty list", do: assert insert([], :a, 0)==[:a]
+  test "insert element into empty list on second position", do: assert catch_error(insert([], :a, 1))==:function_clause
+  test "insert element on negative index", do: assert catch_error(insert([1,2,3], :a,-1))==:function_clause
+  test "insert into out-of-range index", do: assert catch_error(insert([1,2,3], :a, 4))==:function_clause
+  test "insert first element", do: assert insert([1,2,3], :a, 0)==[:a,1,2,3]
+  test "insert middle element", do: assert insert([1,2,3], :a, 1)==[1,:a,2,3]
+  test "insert last element", do: assert insert([1,2,3], :a, 3)==[1,2,3,:a]
 
 end
