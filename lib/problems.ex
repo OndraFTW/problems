@@ -162,7 +162,7 @@ defmodule Problems do
     end
 
     # 20 remove number-th element
-    def remove(list, number) when number>=0 and number>=0, do: remove([], list, number)
+    def remove(list, number) when number>=0, do: remove([], list, number)
     defp remove(left, [_|right], 0), do: reverse(left)++right
     defp remove(left, [head|right], number), do: remove([head|left], right, number-1)
 
@@ -177,9 +177,9 @@ defmodule Problems do
     defp range(a, b, result), do: range(a+1, b, [a|result])
 
     # 23 randomly select number of elements from list
-    def random_select(list, number) when length(list)>=number, do: random_select(list, number, [])
+    def random_select(list, number) when length(list)>=number and number>=0, do: random_select(list, number, [])
     defp random_select(_, 0, result), do: result
-    defp random_select(list, number, result) when number>0 do
+    defp random_select(list, number, result) do
         index=Kernel.round(:random.uniform()*(len(list)-1))
         random_select(remove(list, index), number-1, [kth(list, index)|result])
     end
