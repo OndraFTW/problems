@@ -188,4 +188,15 @@ defmodule ProblemsTest do
   test "insert middle element", do: assert insert([1,2,3], :a, 1)==[1,:a,2,3]
   test "insert last element", do: assert insert([1,2,3], :a, 3)==[1,2,3,:a]
 
+  test "zero number range", do: assert range(1, 1)==[]
+  test "one numbers range", do: assert range(1, 2)==[1]
+  test "two numbers range", do: assert range(1, 3)==[1,2]
+  test "negative numbers range", do: assert range(-5, -2)==[-5, -4, -3]
+
+  test "select zero elements from empty list", do: random_select([], 0)==[]
+  test "select one element from empty list", do: assert catch_error(random_select([], 1))==:function_clause
+  test "select all elements from list", do: assert sort(random_select([1,2,3,4,5], 5))==[1,2,3,4,5]
+  test "select more elements than is in the list", do: assert catch_error(random_select([1,2,3],4))==:function_clause
+  test "select negative number of elements", do: assert catch_error(random_select([1,2,3],-2))==:function_clause
+
 end
