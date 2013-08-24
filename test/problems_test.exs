@@ -38,12 +38,17 @@ defmodule ProblemsTest do
   test "is -2 even", do: assert is_even(-2)
   test "is 1 even", do: assert not is_even(1)
 
+  test "last of empty list", do: assert catch_error(last([]))==:function_clause
   test "last of one", do: assert last([1])==1
   test "last of list", do: assert last([1,2,3])==3
 
+  test "last but one of empty list", do: assert catch_error(but_last([]))==:function_clause
+  test "last but one of list with one element", do: assert catch_error(but_last([1]))==:function_clause
   test "last but one of two", do: assert but_last([1,2])==1
   test "last but one of list", do: assert but_last([1,2,3,5,6])==5
 
+  test "minus first element", do: assert catch_error(kth([1,2,3], -1))==:function_clause
+  test "element after end of list", do: assert catch_error(kth([1,2,3], 3))==:function_clause
   test "0th element", do: assert kth([1],0)
   test "2nd element", do: assert kth([1,2,3,4,5],2)
 
@@ -54,11 +59,13 @@ defmodule ProblemsTest do
   test "reverse non-empty list", do: assert reverse([1,2,3])==[3,2,1]
 
   test "is empty list palindrom", do: assert is_palindrom([])
+  test "is list with one alement palindrom", do: assert is_palindrom([1])
   test "is odd list palindrom", do: assert is_palindrom([1,2,1])
   test "is even list palindrom", do: assert is_palindrom([1,2,2,1])
   test "isnt palindrom", do: assert not is_palindrom([1,2,3])
 
   test "flatten empty list", do: assert flatten([])==[]
+  test "flatten list with one lement", do: assert flatten([1])==[1]
   test "flatten first element", do: assert flatten([[1,2],3])==[1,2,3]
   test "flatten last element", do: assert flatten([1,2,3,[4,5]])==[1,2,3,4,5]
   test "flatten inside", do: assert flatten([1,2,[3,4,5],6])==[1,2,3,4,5,6]
