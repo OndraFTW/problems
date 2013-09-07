@@ -200,10 +200,27 @@ defmodule ProblemsTest do
   test "two numbers range", do: assert range(1, 3)==[1,2]
   test "negative numbers range", do: assert range(-5, -2)==[-5, -4, -3]
 
-  test "select zero elements from empty list", do: random_select([], 0)==[]
+  test "select zero elements from empty list", do: assert random_select([], 0)==[]
   test "select one element from empty list", do: assert catch_error(random_select([], 1))==:function_clause
   test "select all elements from list", do: assert sort(random_select([1,2,3,4,5], 5))==[1,2,3,4,5]
   test "select more elements than is in the list", do: assert catch_error(random_select([1,2,3],4))==:function_clause
   test "select negative number of elements", do: assert catch_error(random_select([1,2,3],-2))==:function_clause
+
+  test "select no numbers", do: assert lotto_select(5, 0)==[]
+  test "select one integer from interval <0, 1)", do: assert lotto_select(1, 1)==[0]
+  test "select two integers from interval <0, 2)", do: assert lotto_select(2, 2)in[[0,1], [1,0]]
+  test "select more numbers than is in interval", do: assert catch_error(lotto_select(3,4))==:function_clause
+  test "select negative number of nubers", do: assert catch_error(lotto_select(2, -1))==:function_clause
+  test "select numbers from impossible interval", do: assert catch_error(lotto_select(-1, 1))==:function_clause
+
+  test "random permutation of empty list", do: assert random_permutation([])==[]
+  test "random permutation of list with one element", do: assert random_permutation([1])==[1]
+  test "random permutation of list with two elements", do: assert random_permutation([1,2]) in [[1,2], [2,1]]
+
+  test "all combinations of length 0", do: assert combinations([1,2,3], 0)==[[]]
+  test "all combinations of length 1", do: assert sort(combinations([1,2,3],1))==[[1],[2],[3]]
+  test "all combinations of length 2", do: assert sort(combinations([1,2,3],2))==[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]
+  test "all combinations of length -1", do: assert catch_error(combinations([1,2,3],-1))==:function_clause
+  test "all combinations of length 1 from empty list", do: assert catch_error(combinations([], 1))==:function_clause
 
 end

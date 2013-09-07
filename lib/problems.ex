@@ -184,14 +184,15 @@ defmodule Problems do
         random_select(remove(list, index), number-1, [kth(list, index)|result])
     end
 
-    # 24 select number numbers from range 1 to max_value
-    def lotto_select(max_value, number), do: random_select(range(1, max_value), number)
+    # 24 select n numbers from range 0 to max_value-1, without repetition
+    def lotto_select(max_value, n) when n<=max_value, do: random_select(range(0, max_value), n)
 
     # 25 get random permutation of list
     def random_permutation(list), do: random_select(list, length(list))
 
     # 26 get all combinations of elements from list, every combination has length len
-    def combinations(list, len), do: comb([], list, len)
+    def combinations(_list, 0), do: [[]]
+    def combinations(list, len) when len>0 and len<=length(list), do: comb([], list, len)
 
     defp comb([], list, 1), do: map(list, fn(e)-> [e] end)
     defp comb(object, list, 1), do: map(list, fn(e)-> [e|object] end)
