@@ -513,6 +513,30 @@ defmodule Problems do
     defp leaves2([{data, nil, nil}|tail], result), do: leaves2(tail, [{data, nil, nil}|result])
     defp leaves2([{_, left, right}|tail], result), do: leaves2([left,right|tail], result)
 
+    # 63 collect all internal nodes
+    def internals(nil), do: []
+    def internals({_data, nil, nil}), do: []
+    def internals({data, left, right}), do: [{data, left, right}|internals(left)++internals(right)]
+
+    # tail-call recursive
+    def internals2(tree), do: internals2([tree], [])
+    defp internals2([], result), do: result
+    defp internals2([nil|tail], result), do: internals2(tail, result)
+    defp internals2([{_data, nil, nil}|tail], result), do: internals2(tail, result)
+    defp internals2([{data, left, right}|tail], result), do: internals2([left, right|tail], [{data, left, right}|result])
+
+    # 64 collect all nodes at level
+    def at_level(nil, _n), do: []
+    def at_level(tree, 0), do: [tree]
+    def at_level({_data, left, right}, n) when n>0, do: at_level(left, n-1)++at_level(right, n-1)
+
+    # tail-call recursive
+    def at_level2(tree, n), do: at_level22([{tree, n}], [])
+    defp at_level22([], result), do: result
+    defp at_level22([{nil, _n}|tail], result), do: at_level22(tail, result)
+    defp at_level22([{node, 0}|tail], result), do: at_level22(tail, [node|result])
+    defp at_level22([{{_data, left, right}, n}|tail], result), do: at_level22([{left, n-1}, {right, n-1}|tail], result)
+
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
