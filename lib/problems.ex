@@ -199,6 +199,9 @@ defmodule Problems do
     defp comb([], list, len), do: conmap(list, fn(e)-> comb([e], List.delete(list, e), len-1) end)
     defp comb(object, list, len), do: conmap(list, fn(e)-> comb([e|object], List.delete(list, e), len-1) end)
 
+    #NOTE 27, 28 don't work - groups {0, 1} and {1, 0} are different but should be same
+    #tests skipped
+
     # 27 divide people into groups of 2, 3 and 4
     def group234(people) when length(people)==9, do: map(all_permutations(people), fn(e)-> groupify(e, [2,3,4]) end)
 
