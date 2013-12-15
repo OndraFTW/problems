@@ -353,7 +353,7 @@ defmodule Problems do
 
     # 50 skipped
 
-    # 54 is tree
+    # 53 is tree
     def is_tree(nil), do: true
     def is_tree({_, left, right}), do: is_tree(left) and is_tree(right)
     def is_tree(_), do: false
@@ -364,6 +364,11 @@ defmodule Problems do
     defp is_tree22([nil|tail]), do: is_tree22 tail
     defp is_tree22([{_, left, right}|tail]), do: is_tree22 [left, right|tail]
     defp is_tree22(_), do: false
+
+    # 54 height of tree
+    def tree_height(nil), do: 0
+    def tree_height({_data, nil, nil}), do: 0
+    def tree_height({_data, left, right}), do: max(tree_height(left), tree_height(right))+1
 
     # 55 construct all completely balanced trees with n nodes
     def cbal_trees(0), do: [nil]
@@ -549,8 +554,8 @@ defmodule Problems do
 
     # returns number of nodes of left and right subtree of complete tree
     # n is sum of numbers of nodes in these subtrees
-    def split_number_of_nodes(n), do: split_number_of_nodes(n, 0, {0, 0})
-    def split_number_of_nodes(n, i, {a, b})do
+    defp split_number_of_nodes(n), do: split_number_of_nodes(n, 0, {0, 0})
+    defp split_number_of_nodes(n, i, {a, b})do
         c=pow(2, i)
         cond do
             2*c<n->
@@ -562,6 +567,55 @@ defmodule Problems do
         end
     end
 
+    # 66 add layout to binary tree
+    # x coordinate is number of node in inorder traversal
+    # y coordinate is distance from root
+    # tree: {:a, {:b, nil, nil}, {:c, {:d, nil, nil}, nil}}
+    # return: {:a, {1, 0}, {:b, {0, 1}, nil, nil}, {:c, {3, 1}, {:d, {2, 2}, nil, nil}, nil}}
+    # picture:
+    #   0 1 2 3
+    # 0   a
+    #    /  \
+    # 1 b     c
+    #        /
+    # 2     d
+    def layout(tree) do
+        {tree, _x}=layout(tree, 0, 0)
+        tree
+    end
+    defp layout(nil, x, _y), do: {nil, x}
+    defp layout({data, left, right}, x, y)do
+        {left, x}=layout(left, x, y+1);
+        this_x=x
+        x=x+1
+        {right, x}=layout(right, x, y+1)
+        {{data, {this_x, y}, left, right}, x}
+    end
+
+    # 67 add layout to binary tree
+    # picture:
+    #   0 1 2 3 4 5 6 
+    # 0       a
+    #       /   \
+    # 1   b       c
+    #            /
+    # 2         d
+    def layout2(tree) do
+        w=tree_width(tree_height(tree))
+        layout2(tree, 0, w, 0)
+    end
+    defp layout2(nil, _x_offfset, _x, _y), do: nil
+    defp layout2({data, left, right}, x_offset, x, y) do
+        this_x=div(x, 2)
+        left=layout2(left, x_offset, this_x, y+1)
+        right=layout2(right, x_offset+this_x+1, this_x, y+1)
+        {data, {x_offset+this_x, y}, left, right}
+    end
+
+    defp tree_width(height), do: tree_width(height, 1)
+    defp tree_width(0, n), do: n
+    defp tree_width(h, n), do: tree_width(h-1, n+pow(2, h))
+    
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
