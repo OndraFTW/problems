@@ -540,6 +540,28 @@ defmodule Problems do
     defp at_level22([{node, 0}|tail], result), do: at_level22(tail, [node|result])
     defp at_level22([{{_data, left, right}, n}|tail], result), do: at_level22([{left, n-1}, {right, n-1}|tail], result)
 
+    # 65 construct complete binary tree with n nodes
+    def complete_tree(0), do: nil
+    def complete_tree(n) do
+        {left, right}=split_number_of_nodes(n-1)
+        {0, complete_tree(left), complete_tree(right)}
+    end
+
+    # returns number of nodes of left and right subtree of complete tree
+    # n is sum of numbers of nodes in these subtrees
+    def split_number_of_nodes(n), do: split_number_of_nodes(n, 0, {0, 0})
+    def split_number_of_nodes(n, i, {a, b})do
+        c=pow(2, i)
+        cond do
+            2*c<n->
+                split_number_of_nodes(n-2*c, i+1, {a+c, b+c})
+            c<n->
+                {a+c, b+(n-c)}
+            true->
+                {a+n, b}
+        end
+    end
+
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
