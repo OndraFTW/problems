@@ -1,4 +1,4 @@
-Code.require_file "../../lib/problems.ex", __FILE__
+Code.require_file "../../lib/problems.ex", __ENV__.file
 ExUnit.start
 
 defmodule ProblemsTest do
@@ -222,5 +222,12 @@ defmodule ProblemsTest do
   test "all combinations of length 2", do: assert sort(combinations([1,2,3],2))==[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]
   test "all combinations of length -1", do: assert catch_error(combinations([1,2,3],-1))==:function_clause
   test "all combinations of length 1 from empty list", do: assert catch_error(combinations([], 1))==:function_clause
+
+  test "sort empty list of lists according to length", do: assert lsort([])==[]
+  test "sort list of one empty list according to length", do: assert lsort([[]])==[[]]
+  test "sort list of one list according to length", do: assert lsort([[0]])==[[0]]
+  test "sort list of two same lists according to length", do: assert lsort([[0],[0]])==[[0],[0]]
+  test "sort list of lists according to length", do: assert lsort([[0,1,2],[0,1],[0]])==[[0],[0,1],[0,1,2]]
+  test "sort list of lists according to length", do: assert lsort([[0,1],[0,1],[0]])==[[0],[0,1],[0,1]]
 
 end
