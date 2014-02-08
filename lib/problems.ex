@@ -231,9 +231,10 @@ defmodule Problems do
     defp length_frequency([_|tail], e, result), do: length_frequency(tail, e, result)
 
     # 31 determine whether number is prime
+    def is_prime(number) when number<=1, do: false
     def is_prime(number), do: number==last(sieve_of_eratosthenes(number))
 
-    def sieve_of_eratosthenes(number), do: sieve_of_eratosthenes(range(2, number), [])
+    def sieve_of_eratosthenes(number), do: sieve_of_eratosthenes(range(2, number+1), [])
     defp sieve_of_eratosthenes([], result), do: reverse(result)
     defp sieve_of_eratosthenes([head|tail], result),
         do: sieve_of_eratosthenes(filter(tail, fn(e)-> rem(e, head)!=0 end), [head|result])
@@ -243,14 +244,14 @@ defmodule Problems do
     def gcd(a, b), do: gcd(b, rem(a, b))
 
     # 33 determine whether numbers a and b are coprimes
-    def coprime(a, b), do: gcd(a, b)==1 
+    def coprimes(a, b), do: gcd(a, b)==1 
 
     # 34 implement Euler's totient function
     def totient_phi(1), do: 1
     def totient_phi(number), do: totient_phi(range(1, number-1), number, 0)
     defp totient_phi([], _, result), do: result
     defp totient_phi([head|tail], number, result) do 
-        if coprime(head, number) do
+        if coprimes(head, number) do
             totient_phi(tail, number, result+1)
         else
             totient_phi(tail, number, result)

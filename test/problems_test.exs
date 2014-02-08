@@ -227,7 +227,38 @@ defmodule ProblemsTest do
   test "sort list of one empty list according to length", do: assert lsort([[]])==[[]]
   test "sort list of one list according to length", do: assert lsort([[0]])==[[0]]
   test "sort list of two same lists according to length", do: assert lsort([[0],[0]])==[[0],[0]]
-  test "sort list of lists according to length", do: assert lsort([[0,1,2],[0,1],[0]])==[[0],[0,1],[0,1,2]]
-  test "sort list of lists according to length", do: assert lsort([[0,1],[0,1],[0]])==[[0],[0,1],[0,1]]
+  test "sort list of lists according to length 1", do: assert lsort([[0,1,2],[0,1],[0]])==[[0],[0,1],[0,1,2]]
+  test "sort list of lists according to length 2", do: assert lsort([[0,1],[0,1],[0]])==[[0],[0,1],[0,1]]
+  
+  test "sort empty list of lists according to length frequency", do: assert lfsort([])==[]
+  test "sort list of one empty list according to length frequency", do: assert lfsort([[]])==[[]]
+  test "sort list of one list according to length frequency", do: assert lfsort([[0]])==[[0]]
+  test "sort list of two same lists according to length frequency", do: assert lfsort([[0],[0]])==[[0],[0]]
+  test "sort list of lists according to length frequency 1", do: assert lfsort([[0,1],[0,1],[0]])==[[0],[0,1],[0,1]]
+  test "sort list of lists according to length  frequency 2", do: assert lfsort([[0,1],[0],[0]])==[[0,1],[0],[0]]
+  test "sort list of lists according to length  frequency 3", do: assert lfsort([[0,1,2],[0,1],[0],[0]])==[[0,1,2],[0,1],[0],[0]]
+
+  test "is -1 prime", do: assert is_prime(-1)==false
+  test "is 0 prime", do: assert is_prime(0)==false
+  test "is 1 prime", do: assert is_prime(1)==false
+  test "is 2 prime", do: assert is_prime(2)==true
+  test "is 3 prime", do: assert is_prime(3)==true
+  test "is 4 prime", do: assert is_prime(4)==false
+  test "is 5 prime", do: assert is_prime(5)==true
+  test "is 59 prime", do: assert is_prime(59)==true
+  test "is 60 prime", do: assert is_prime(60)==false
+  
+  test "greatest common divisor of 1 and 1", do: assert gcd(1,1)==1
+  test "greatest common divisor of 2 and 2", do: assert gcd(2,2)==2
+  test "greatest common divisor of 2 and 3", do: assert gcd(2,3)==1
+  test "greatest common divisor of 55 and 66", do: assert gcd(55,66)==11
+  test "greatest common divisor of 55 and 67", do: assert gcd(55,67)==1
+  
+  test "are 1 and 1 coprimes", do: assert coprimes(1,1)==true
+  test "are 1 and 2 coprimes", do: assert coprimes(1,2)==true
+  test "are 2 and 2 coprimes", do: assert coprimes(2,2)==false
+  test "are 5 and 7 coprimes", do: assert coprimes(5,7)==true
+  test "are 55 and 60 coprimes", do: assert coprimes(55,60)==false
+  test "are 60 and 59 coprimes", do: assert coprimes(60,59)==true
 
 end
