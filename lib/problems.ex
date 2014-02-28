@@ -234,7 +234,8 @@ defmodule Problems do
     def is_prime(number) when number<=1, do: false
     def is_prime(number), do: number==last(sieve_of_eratosthenes(number))
 
-    def sieve_of_eratosthenes(number), do: sieve_of_eratosthenes(range(2, number+1), [])
+    defp sieve_of_eratosthenes(number) when number<=1, do: []
+    defp sieve_of_eratosthenes(number), do: sieve_of_eratosthenes(range(2, number+1), [])
     defp sieve_of_eratosthenes([], result), do: reverse(result)
     defp sieve_of_eratosthenes([head|tail], result),
         do: sieve_of_eratosthenes(filter(tail, fn(e)-> rem(e, head)!=0 end), [head|result])
@@ -248,7 +249,7 @@ defmodule Problems do
 
     # 34 implement Euler's totient function
     def totient_phi(1), do: 1
-    def totient_phi(number), do: totient_phi(range(1, number-1), number, 0)
+    def totient_phi(number) when number>1, do: totient_phi(range(0, number), number, 0)
     defp totient_phi([], _, result), do: result
     defp totient_phi([head|tail], number, result) do 
         if coprimes(head, number) do
@@ -260,7 +261,8 @@ defmodule Problems do
 
     # 35 get prime factors of number
     def prime_factors(1), do: [1]
-    def prime_factors(number), do: prime_factors(sieve_of_eratosthenes(number), number, [])
+    def prime_factors(number) when number>1,
+      do: prime_factors(sieve_of_eratosthenes(number), number, [])
     defp prime_factors([], _, result), do: reverse(result)
     defp prime_factors([head|tail], number, result) do
         if rem(number, head)==0 do
@@ -272,7 +274,8 @@ defmodule Problems do
 
     # 36 get prime factors of number and their multiplicity
     def prime_factors_mult(1), do: [{1, 1}]
-    def prime_factors_mult(number), do: prime_factors_mult(sieve_of_eratosthenes(number), number, 0, [])
+    def prime_factors_mult(number) when number>1,
+      do: prime_factors_mult(sieve_of_eratosthenes(number), number, 0, [])
     defp prime_factors_mult([], _, 0, result), do: reverse(result)
     defp prime_factors_mult([head|tail], number, multiplicity, result) do
         cond do
@@ -287,9 +290,10 @@ defmodule Problems do
 
     # 37 same as 34
     def totient_phi2(1), do: 1
-    def totient_phi2(number), do: totient_phi2(prime_factors_mult(number), 0)
+    def totient_phi2(number) when number>1,
+      do: totient_phi2(prime_factors_mult(number), 1)
     defp totient_phi2([], result), do: result
-    defp totient_phi2([{m, p}|tail], result), do: totient_phi2(tail, result+(p-1)*pow(p, (m-1)))
+    defp totient_phi2([{m, p}|tail], result), do: totient_phi2(tail, result*(p-1)*pow(p, (m-1)))
 
     # 38 compare 34 and 37
     # skipped
@@ -298,7 +302,7 @@ defmodule Problems do
     def primes_range(a, b) when a<=b, do: filter(sieve_of_eratosthenes(b), fn(x)-> x>=a end)
 
     # 40 for even number get {a, b} where a and b are primes and a+b=number (goldbach conjecture)
-    def goldbach(number) when rem(number, 2)==0 do
+    def goldbach(number) when rem(number, 2)==0 and number>2 do
         primes=sieve_of_eratosthenes(number)
         number_half=number/2
         left=filter primes, fn(x)-> x<=number_half end

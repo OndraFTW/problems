@@ -260,5 +260,50 @@ defmodule ProblemsTest do
   test "are 5 and 7 coprimes", do: assert coprimes(5,7)==true
   test "are 55 and 60 coprimes", do: assert coprimes(55,60)==false
   test "are 60 and 59 coprimes", do: assert coprimes(60,59)==true
+  
+  test "eulers totient function of 0", do: assert catch_error(totient_phi(0))==:function_clause
+  test "eulers totient function of 1", do: assert totient_phi(1)==1
+  test "eulers totient function of 3", do: assert totient_phi(3)==2
+  test "eulers totient function of 5", do: assert totient_phi(5)==4
+  test "eulers totient function of 55", do: assert totient_phi(55)==40
+  
+  test "prime factors of 0", do: assert catch_error(prime_factors(0))==:function_clause
+  test "prime factors of 1", do: assert prime_factors(1)==[1]
+  test "prime factors of 4", do: assert prime_factors(4)==[2,2]
+  test "prime factors of 12", do: assert prime_factors(12)==[2,2,3]
+  test "prime factors of 55", do: assert prime_factors(55)==[5,11]
+  
+  test "prime factors with multiplicity of 0", do: assert catch_error(prime_factors_mult(0))==:function_clause
+  test "prime factors with multiplicity of 1", do: assert prime_factors_mult(1)==[{1,1}]
+  test "prime factors with multiplicity of 4", do: assert prime_factors_mult(4)==[{2,2}]
+  test "prime factors with multiplicity of 12", do: assert prime_factors_mult(12)==[{2,2},{1,3}]
+  test "prime factors with multiplicity of 55", do: assert prime_factors_mult(55)==[{1,5},{1,11}]
+  
+  test "eulers totient function 2 of 0", do: assert catch_error(totient_phi2(0))==:function_clause
+  test "eulers totient function 2 of 1", do: assert totient_phi2(1)==1
+  test "eulers totient function 2 of 3", do: assert totient_phi2(3)==2
+  test "eulers totient function 2 of 5", do: assert totient_phi2(5)==4
+  test "eulers totient function 2 of 55", do: assert totient_phi2(55)==40
 
+  test "all primes in range -5 to -1", do: assert primes_range(-5,-1)==[]
+  test "all primes in range -5 to 5", do: assert primes_range(-5,5)==[2,3,5]
+  test "all primes in range 5 to 10", do: assert primes_range(5,10)==[5,7]
+  test "all primes in range 100 to 110", do: assert primes_range(100,110)==[101,103,107,109]
+  
+  test "goldbach conjecture of -1", do: assert catch_error(goldbach(-1))==:function_clause
+  test "goldbach conjecture of 0", do: assert catch_error(goldbach(0))==:function_clause
+  test "goldbach conjecture of 3", do: assert catch_error(goldbach(0))==:function_clause
+  test "goldbach conjecture of 6" do
+    r=goldbach(6)
+    assert Enum.any?([{3,3}], fn(a)-> a==r end)
+  end
+  test "goldbach conjecture of 10" do
+    r=goldbach(10)
+    assert Enum.any?([{3,7},{7,3},{5,5}], fn(a)-> a==r end)
+  end
+  test "goldbach conjecture of 12" do
+    r=goldbach(12)
+    assert Enum.any?([{5,7},{7,5}], fn(a)-> a==r end)
+  end
+  
 end
