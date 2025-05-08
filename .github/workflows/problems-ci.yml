@@ -20,3 +20,9 @@ jobs:
           elixir-version: 1.14.0
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: mix test
