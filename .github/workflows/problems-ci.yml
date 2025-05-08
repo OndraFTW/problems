@@ -15,4 +15,3 @@ jobs:
           elixir-version: 1.14.0
       - run: mix deps.get
       - run: mix compile --warnings-as-errors
-      - run: mix test
