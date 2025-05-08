@@ -3,11 +3,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: Select branch
-        type: branch
-        required: true
 jobs:
   build:
     name: Build
