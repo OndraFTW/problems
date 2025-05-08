@@ -1,0 +1,18 @@
+name: 99 problems continuous integration
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Select branch
+        type: branch
+        required: true
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - run: mix compile
+      
