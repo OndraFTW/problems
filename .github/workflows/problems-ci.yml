@@ -14,5 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.3.0
+      - uses: actions/setup-elixir@v1
+        with:
+          otp-version: '25'
+          elixir-version: '1.14.0'
       - run: mix compile
       
