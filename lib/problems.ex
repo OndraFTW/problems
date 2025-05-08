@@ -180,7 +180,7 @@ defmodule Problems do
     def random_select(list, number) when length(list)>=number and number>=0, do: random_select(list, number, [])
     defp random_select(_, 0, result), do: result
     defp random_select(list, number, result) do
-        index=Kernel.round(:random.uniform()*(len(list)-1))
+        index=Kernel.round(:rand.uniform()*(len(list)-1))
         random_select(remove(list, index), number-1, [kth(list, index)|result])
     end
 

@@ -1,5 +1,3 @@
-Code.require_file "../../lib/problems.ex", __ENV__.file
-ExUnit.start
 
 defmodule ProblemsTest do
   use ExUnit.Case, async: true
