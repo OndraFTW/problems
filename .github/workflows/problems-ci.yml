@@ -47,4 +47,5 @@ jobs:
         with:
           otp-version: 25
           elixir-version: 1.14.0
-      - run: mix test
+      - run: mix test --cover --export-coverage default
+      - run: mix test.coverage
