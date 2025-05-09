@@ -13,7 +13,9 @@ jobs:
       - uses: actions/cache@v4
         id: problems-cache
         with:
-          path: deps _build
+          path: |
+            deps
+            _build
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - run: echo ${{ steps.problems-cache.outputs.cache-hit }}
@@ -34,7 +36,9 @@ jobs:
       - uses: actions/cache@v4
         id: problems-cache
         with:
-          path: deps _build
+          path: |
+            deps
+            _build
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - run: echo ${{ steps.problems-cache.outputs.cache-hit }}
