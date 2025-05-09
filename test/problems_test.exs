@@ -43,6 +43,14 @@ defmodule ProblemsTest do
   test "empty and non empty lists are not equal", do: assert not list_equals([],[13,14])
   test "lists with different order are not equal", do: assert not list_equals([14,15,13],[13,14,15])
 
+  test "empty lists of lists are equal", do: assert list_equals([],[])
+  test "empty lists of empty lists are equal", do: assert list_equals([[]],[[]])
+  test "one item equal lists of lists are equal", do: assert list_equals([[55]],[[55]])
+  test "longer equal lists of lists are equal", do: assert list_equals([[7],[8],[9]],[[7],[8],[9]])
+  test "non empty and empty lists of lists are not equal", do: assert not list_equals([[12]],[])
+  test "empty and non empty lists of lists are not equal", do: assert not list_equals([],[[13],[14]])
+  test "lists of lists with different order are not equal", do: assert not list_equals([[14,15],[13]],[[14],[15,13]])
+
   test "empty lists are equal ignoring order", do: assert list_equals_ignore_order([],[])
   test "one item equal lists are equal ignoring order", do: assert list_equals_ignore_order([55],[55])
   test "longer equal lists are equal ignoring order", do: assert list_equals_ignore_order([7,8,9],[7,8,9])
