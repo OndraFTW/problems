@@ -1,4 +1,4 @@
-name: 99 problems continuous integration
+name: 99 problems CI
 on:
   push:
   pull_request:
