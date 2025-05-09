@@ -11,13 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v4
+        id: problems-cache
         with:
-          path: |
-            deps
-            _build
+          path: deps, _build
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-mix-
+          restore-keys: ${{ runner.os }}-mix-
+      - run: echo ${{ steps.cache-npm.outputs.cache-hit }}
       - uses: actions/checkout@v3.3.0
       - uses: erlef/setup-beam@v1
         with:
@@ -32,6 +31,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - uses: actions/cache@v4
+        id: problems-cache
+        with:
+          path: deps, _build
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - run: echo ${{ steps.cache-npm.outputs.cache-hit }}
       - uses: actions/checkout@v3.3.0
       - uses: erlef/setup-beam@v1
         with:
