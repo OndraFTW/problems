@@ -397,7 +397,7 @@ defmodule Problems do
 
     # 54 height of tree
     def tree_height(nil), do: 0
-    def tree_height({_data, nil, nil}), do: 1
+    def tree_height({_data, nil, nil}), do: 0
     def tree_height({_data, left, right}), do: max(tree_height(left), tree_height(right))+1
 
     # 55 construct all completely balanced trees with n nodes
@@ -478,18 +478,18 @@ defmodule Problems do
         {result, _}=height_trees_helper(n)
         result
     end
-    defp height_trees_helper(0), do: {[{:h, nil, nil}], [nil]}
+    defp height_trees_helper(0), do: {[{:x, nil, nil}], [nil]}
     defp height_trees_helper(n) when n>0 do
         {subtrees_e, subtrees_l}=height_trees_helper(n-1)
         {construct_trees(subtrees_e, subtrees_l)++construct_trees(subtrees_l, subtrees_e)++construct_trees(subtrees_e, subtrees_e), subtrees_l++construct_trees(subtrees_l, subtrees_l)}
     end
 
     # 60 generate all height balanced trees with n nodes
-    def hbal_trees_nodes(0), do: nil
+    def hbal_trees_nodes(0), do: [nil]
     def hbal_trees_nodes(n) do
         min=min_height(n)
         max=max_height(n)
-        filter conmap(range(min, max), fn(h)-> hbal_trees(h) end), fn(e)->number_of_nodes(e)==n end
+        filter(conmap(range(min, max+1), fn(h)-> hbal_trees(h) end), fn(e)->number_of_nodes(e)==n end)
     end
 
     # return number of nodes in tree
@@ -541,27 +541,27 @@ defmodule Problems do
 
     # 62 collect all leaves
     def leaves(nil), do: []
-    def leaves({data, nil, nil}), do: [{data, nil, nil}]
+    def leaves({data, nil, nil}), do: [data]
     def leaves({_, left, right}), do: leaves(left)++leaves(right)
 
     # tail-call recursive
-    def leaves2(tree), do: leaves2([tree], [])
+    def leaves2(tree), do: reverse(leaves2([tree], []))
     defp leaves2([], result), do: result
     defp leaves2([nil|tail], result), do: leaves2(tail, result)
-    defp leaves2([{data, nil, nil}|tail], result), do: leaves2(tail, [{data, nil, nil}|result])
+    defp leaves2([{data, nil, nil}|tail], result), do: leaves2(tail, [data|result])
     defp leaves2([{_, left, right}|tail], result), do: leaves2([left,right|tail], result)
 
     # 63 collect all internal nodes
     def internals(nil), do: []
     def internals({_data, nil, nil}), do: []
-    def internals({data, left, right}), do: [{data, left, right}|internals(left)++internals(right)]
+    def internals({data, left, right}), do: [data|internals(left)++internals(right)]
 
     # tail-call recursive
-    def internals2(tree), do: internals2([tree], [])
+    def internals2(tree), do: reverse(internals2([tree], []))
     defp internals2([], result), do: result
     defp internals2([nil|tail], result), do: internals2(tail, result)
     defp internals2([{_data, nil, nil}|tail], result), do: internals2(tail, result)
-    defp internals2([{data, left, right}|tail], result), do: internals2([left, right|tail], [{data, left, right}|result])
+    defp internals2([{data, left, right}|tail], result), do: internals2([left, right|tail], [data|result])
 
     # 64 collect all nodes at level
     def at_level(nil, _n), do: []

@@ -404,10 +404,10 @@ defmodule ProblemsTest do
   test "tree with empty tuple not tree - tail call recursive", do: assert is_tree2({"A", {"A", nil, {}}, nil})==false
 
   test "nil tree height", do: assert tree_height(nil)==0
-  test "one node tree height", do: assert tree_height({"A", nil, nil})==1
-  test "teo nodes tree height", do: assert tree_height({"A", {"A", nil, nil}, nil})==2
-  test "three nodes in line tree height", do: assert tree_height({"A", nil, {"A", nil, {"A", nil, nil}}})==3
-  test "three nodes tree height", do: assert tree_height({"A", {"B", nil, nil}, {"C", nil, nil}})==2
+  test "one node tree height", do: assert tree_height({"A", nil, nil})==0
+  test "teo nodes tree height", do: assert tree_height({"A", {"A", nil, nil}, nil})==1
+  test "three nodes in line tree height", do: assert tree_height({"A", nil, {"A", nil, {"A", nil, nil}}})==2
+  test "three nodes tree height", do: assert tree_height({"A", {"B", nil, nil}, {"C", nil, nil}})==1
 
   test "all balanaced trees with 0 nodes", do: assert cbal_trees(0)==[nil]
   test "all balanaced trees with 1 node", do: assert cbal_trees(1)==[{:x,nil,nil}]
@@ -436,4 +436,77 @@ defmodule ProblemsTest do
   test "all symetric trees with 1 node", do: assert sym_cbal_trees(1)==[{:x,nil,nil}]
   test "all symetric trees with 2 nodes", do: assert sym_cbal_trees(2)==[]
   test "all symetric trees with 3 nodes", do: assert sym_cbal_trees(3)==[{:x,{:x,nil,nil},{:x,nil,nil}}]
+
+  test "all height balanaced trees with 0 height", do: assert hbal_trees(0)==[{:x, nil, nil}]
+  test "all height balanaced trees with 1 height", do: assert hbal_trees(1)==[{:x, {:x, nil, nil}, nil}, {:x, nil, {:x, nil, nil}}, {:x, {:x, nil, nil}, {:x, nil, nil}}]
+  test "all height balanaced trees with 2 height" do
+    expected=[
+              {:x, {:x, {:x, nil, nil}, nil}, {:x, nil, nil}},
+              {:x, {:x, nil, {:x, nil, nil}}, {:x, nil, nil}},
+              {:x, {:x, {:x, nil, nil}, {:x, nil, nil}}, {:x, nil, nil}},
+              {:x, {:x, nil, nil}, {:x, {:x, nil, nil}, {:x, nil, nil}}},
+              {:x, {:x, nil, nil}, {:x, nil, {:x, nil, nil}}},
+              {:x, {:x, nil, nil}, {:x, {:x, nil, nil}, nil}},
+              {:x, {:x, {:x, nil, nil}, nil}, {:x, {:x, nil, nil}, {:x, nil, nil}}},
+              {:x, {:x, {:x, nil, nil}, nil}, {:x, nil, {:x, nil, nil}}},
+              {:x, {:x, {:x, nil, nil}, nil}, {:x, {:x, nil, nil}, nil}},
+              {:x, {:x, nil, {:x, nil, nil}}, {:x, {:x, nil, nil}, {:x, nil, nil}}},
+              {:x, {:x, nil, {:x, nil, nil}}, {:x, nil, {:x, nil, nil}}},
+              {:x, {:x, nil, {:x, nil, nil}}, {:x, {:x, nil, nil}, nil}},
+              {:x, {:x, {:x, nil, nil}, {:x, nil, nil}}, {:x, {:x, nil, nil}, {:x, nil, nil}}},
+              {:x, {:x, {:x, nil, nil}, {:x, nil, nil}}, {:x, nil, {:x, nil, nil}}},
+              {:x, {:x, {:x, nil, nil}, {:x, nil, nil}}, {:x, {:x, nil, nil}, nil}}
+    ]
+    assert hbal_trees(2)==expected
+  end
+
+  test "all height balanaced trees with 0 nodes", do: assert hbal_trees_nodes(0)==[nil]
+  test "all height balanaced trees with 1 node", do: assert hbal_trees_nodes(1)==[{:x, nil, nil}]
+  test "all height balanaced trees with 2 nodes" do
+    expected=[{:x, nil, {:x, nil, nil}}, {:x, {:x, nil, nil}, nil}]
+    assert hbal_trees_nodes(2)==expected
+  end
+
+  test "nil tree leaves number", do: assert number_of_leaves(nil)==0
+  test "one node tree leaves number", do: assert number_of_leaves({"A", nil, nil})==1
+  test "teo nodes tree leaves number", do: assert number_of_leaves({"A", {"A", nil, nil}, nil})==1
+  test "three nodes in line tree leaves number", do: assert number_of_leaves({"A", nil, {"A", nil, {"A", nil, nil}}})==1
+  test "three nodes tree leaves number", do: assert number_of_leaves({"A", {"B", nil, nil}, {"C", nil, nil}})==2
+  test "five nodes tree leaves number", do: assert number_of_leaves({"A", {"B", nil, nil}, {"C", {"C", nil, nil}, {"C", nil, nil}}})==3
+
+  test "nil tree leaves number - tail call recursive", do: assert number_of_leaves2(nil)==0
+  test "one node tree leaves number - tail call recursive", do: assert number_of_leaves2({"A", nil, nil})==1
+  test "teo nodes tree leaves number - tail call recursive", do: assert number_of_leaves2({"A", {"A", nil, nil}, nil})==1
+  test "three nodes in line tree leaves number - tail call recursive", do: assert number_of_leaves2({"A", nil, {"A", nil, {"A", nil, nil}}})==1
+  test "three nodes tree leaves number - tail call recursive", do: assert number_of_leaves2({"A", {"B", nil, nil}, {"C", nil, nil}})==2
+  test "five nodes tree leaves number - tail call recursive", do: assert number_of_leaves2({"A", {"B", nil, nil}, {"C", {"C", nil, nil}, {"C", nil, nil}}})==3
+
+  test "nil tree leaves", do: assert leaves(nil)==[]
+  test "one node tree leaves", do: assert leaves({"A", nil, nil})==["A"]
+  test "teo nodes tree leaves", do: assert leaves({"A", {"B", nil, nil}, nil})==["B"]
+  test "three nodes in line tree leaves", do: assert leaves({"A", nil, {"B", nil, {"C", nil, nil}}})==["C"]
+  test "three nodes tree leaves", do: assert leaves({"A", {"B", nil, nil}, {"C", nil, nil}})==["B","C"]
+  test "five nodes tree leaves", do: assert leaves({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}})==["B","D","E"]
+
+  test "nil tree leaves - tail call recursive", do: assert leaves2(nil)==[]
+  test "one node tree leaves - tail call recursive", do: assert leaves2({"A", nil, nil})==["A"]
+  test "teo nodes tree leaves - tail call recursive", do: assert leaves2({"A", {"B", nil, nil}, nil})==["B"]
+  test "three nodes in line tree leaves - tail call recursive", do: assert leaves2({"A", nil, {"B", nil, {"C", nil, nil}}})==["C"]
+  test "three nodes tree leaves - tail call recursive", do: assert leaves2({"A", {"B", nil, nil}, {"C", nil, nil}})==["B","C"]
+  test "five nodes tree leaves - tail call recursive", do: assert leaves2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}})==["B","D","E"]
+
+  test "nil tree internals", do: assert internals(nil)==[]
+  test "one node tree internals", do: assert internals({"A", nil, nil})==[]
+  test "teo nodes tree internals", do: assert internals({"A", {"B", nil, nil}, nil})==["A"]
+  test "three nodes in line tree internals", do: assert internals({"A", nil, {"B", nil, {"C", nil, nil}}})==["A","B"]
+  test "three nodes tree internals", do: assert internals({"A", {"B", nil, nil}, {"C", nil, nil}})==["A"]
+  test "five nodes tree internals", do: assert internals({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}})==["A","C"]
+
+  test "nil tree internals - tail call recursive", do: assert internals2(nil)==[]
+  test "one node tree internals - tail call recursive", do: assert internals2({"A", nil, nil})==[]
+  test "teo nodes tree internals - tail call recursive", do: assert internals2({"A", {"B", nil, nil}, nil})==["A"]
+  test "three nodes in line tree internals - tail call recursive", do: assert internals2({"A", nil, {"B", nil, {"C", nil, nil}}})==["A","B"]
+  test "three nodes tree internals - tail call recursive", do: assert internals2({"A", {"B", nil, nil}, {"C", nil, nil}})==["A"]
+  test "five nodes tree internals - tail call recursive", do: assert internals2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}})==["A","C"]
+
 end
