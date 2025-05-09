@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@v3.3.0
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: 25
-          elixir-version: 1.14.0
+      #- uses: actions/checkout@v3.3.0
+      #- uses: erlef/setup-beam@v1
+      #  with:
+      #    otp-version: 25
+      #    elixir-version: 1.14.0
       - run: mix test
