@@ -35,21 +35,21 @@ defmodule ProblemsTest do
   test "is 4 even", do: assert is_even(4)
   test "is -2 even", do: assert is_even(-2)
   test "is 1 even", do: assert not is_even(1)
-  
+
   test "empty lists are equal", do: assert list_equals([],[])
   test "one item equal lists are equal", do: assert list_equals([55],[55])
   test "longer equal lists are equal", do: assert list_equals([7,8,9],[7,8,9])
   test "non empty and empty lists are not equal", do: assert not list_equals([12],[])
   test "empty and non empty lists are not equal", do: assert not list_equals([],[13,14])
   test "lists with different order are not equal", do: assert not list_equals([14,15,13],[13,14,15])
-  
+
   test "empty lists are equal ignoring order", do: assert list_equals_ignore_order([],[])
   test "one item equal lists are equal ignoring order", do: assert list_equals_ignore_order([55],[55])
   test "longer equal lists are equal ignoring order", do: assert list_equals_ignore_order([7,8,9],[7,8,9])
   test "non empty and empty lists are not equal ignoring order", do: assert not list_equals_ignore_order([12],[])
   test "empty and non empty lists are not equal ignoring order", do: assert not list_equals_ignore_order([],[13,14])
   test "lists with different order are equal ignoring order", do: assert list_equals_ignore_order([14,15,13],[13,14,15])
-  
+
   test "empty list has no duplicates", do: assert remove_duplicates([])==[]
   test "one item list has no duplicates", do: assert remove_duplicates([99])==[99]
   test "list has no duplicates", do: assert remove_duplicates([7,8,9])==[7,8,9]
@@ -58,7 +58,7 @@ defmodule ProblemsTest do
   test "list has duplicates of every item", do: assert remove_duplicates([7,9,8,9,7,8])==[7,9,8]
   test "list has many duplicates of every item", do: assert remove_duplicates([7,9,9,8,9,9,7,8,9,7,8])==[7,9,8]
   test "list has only duplicates", do: assert remove_duplicates([4,4,4,4,4,4,4,4,4])==[4]
-  
+
  test "remove duplicates from list of lists" do
       input=[
       [["aldo","david"],["evi","carla","beat"],["gary","hugo","ida","flip"]],
@@ -78,7 +78,7 @@ defmodule ProblemsTest do
       ]
       assert remove_duplicates(input, &list_of_lists_equals/2)==expected
   end
-  
+
   test "last of empty list", do: assert catch_error(last([]))==:function_clause
   test "last of one", do: assert last([1])==1
   test "last of list", do: assert last([1,2,3])==3
@@ -184,7 +184,7 @@ defmodule ProblemsTest do
   test "replicate nonempty list once", do: assert replicate([1,2], 1)==[1,2]
   test "replicate nonempty list twice", do: assert replicate([1,2], 2)==[1,1,2,2]
   test "replicate nonempty list with repeating elements", do: assert replicate([1,1,1], 3)==[1,1,1,1,1,1,1,1,1]
-  
+
   test "drop from empty list", do: assert drop([], 2)==[]
   test "drop from empty list every zeroth element", do: assert catch_error(drop([], 0))==:function_clause
   test "drop from nonempty list every minus first element", do: assert catch_error(drop([1,2,3,4,5,6], -1))==:function_clause
@@ -279,14 +279,14 @@ defmodule ProblemsTest do
     ]
     assert group(["aldo","beat","carla","david","evi"], [2,3])==expected
   end
-  
+
   test "sort empty list of lists according to length", do: assert lsort([])==[]
   test "sort list of one empty list according to length", do: assert lsort([[]])==[[]]
   test "sort list of one list according to length", do: assert lsort([[0]])==[[0]]
   test "sort list of two same lists according to length", do: assert lsort([[0],[0]])==[[0],[0]]
   test "sort list of lists according to length 1", do: assert lsort([[0,1,2],[0,1],[0]])==[[0],[0,1],[0,1,2]]
   test "sort list of lists according to length 2", do: assert lsort([[0,1],[0,1],[0]])==[[0],[0,1],[0,1]]
-  
+
   test "sort empty list of lists according to length frequency", do: assert lfsort([])==[]
   test "sort list of one empty list according to length frequency", do: assert lfsort([[]])==[[]]
   test "sort list of one list according to length frequency", do: assert lfsort([[0]])==[[0]]
@@ -304,38 +304,38 @@ defmodule ProblemsTest do
   test "is 5 prime", do: assert is_prime(5)==true
   test "is 59 prime", do: assert is_prime(59)==true
   test "is 60 prime", do: assert is_prime(60)==false
-  
+
   test "greatest common divisor of 1 and 1", do: assert gcd(1,1)==1
   test "greatest common divisor of 2 and 2", do: assert gcd(2,2)==2
   test "greatest common divisor of 2 and 3", do: assert gcd(2,3)==1
   test "greatest common divisor of 55 and 66", do: assert gcd(55,66)==11
   test "greatest common divisor of 55 and 67", do: assert gcd(55,67)==1
-  
+
   test "are 1 and 1 coprimes", do: assert coprimes(1,1)==true
   test "are 1 and 2 coprimes", do: assert coprimes(1,2)==true
   test "are 2 and 2 coprimes", do: assert coprimes(2,2)==false
   test "are 5 and 7 coprimes", do: assert coprimes(5,7)==true
   test "are 55 and 60 coprimes", do: assert coprimes(55,60)==false
   test "are 60 and 59 coprimes", do: assert coprimes(60,59)==true
-  
+
   test "eulers totient function of 0", do: assert catch_error(totient_phi(0))==:function_clause
   test "eulers totient function of 1", do: assert totient_phi(1)==1
   test "eulers totient function of 3", do: assert totient_phi(3)==2
   test "eulers totient function of 5", do: assert totient_phi(5)==4
   test "eulers totient function of 55", do: assert totient_phi(55)==40
-  
+
   test "prime factors of 0", do: assert catch_error(prime_factors(0))==:function_clause
   test "prime factors of 1", do: assert prime_factors(1)==[1]
   test "prime factors of 4", do: assert prime_factors(4)==[2,2]
   test "prime factors of 12", do: assert prime_factors(12)==[2,2,3]
   test "prime factors of 55", do: assert prime_factors(55)==[5,11]
-  
+
   test "prime factors with multiplicity of 0", do: assert catch_error(prime_factors_mult(0))==:function_clause
   test "prime factors with multiplicity of 1", do: assert prime_factors_mult(1)==[{1,1}]
   test "prime factors with multiplicity of 4", do: assert prime_factors_mult(4)==[{2,2}]
   test "prime factors with multiplicity of 12", do: assert prime_factors_mult(12)==[{2,2},{1,3}]
   test "prime factors with multiplicity of 55", do: assert prime_factors_mult(55)==[{1,5},{1,11}]
-  
+
   test "eulers totient function 2 of 0", do: assert catch_error(totient_phi2(0))==:function_clause
   test "eulers totient function 2 of 1", do: assert totient_phi2(1)==1
   test "eulers totient function 2 of 3", do: assert totient_phi2(3)==2
@@ -346,7 +346,7 @@ defmodule ProblemsTest do
   test "all primes in range -5 to 5", do: assert primes_range(-5,5)==[2,3,5]
   test "all primes in range 5 to 10", do: assert primes_range(5,10)==[5,7]
   test "all primes in range 100 to 110", do: assert primes_range(100,110)==[101,103,107,109]
-  
+
   test "goldbach conjecture of -1", do: assert catch_error(goldbach(-1))==:function_clause
   test "goldbach conjecture of 0", do: assert catch_error(goldbach(0))==:function_clause
   test "goldbach conjecture of 3", do: assert catch_error(goldbach(0))==:function_clause
@@ -362,5 +362,78 @@ defmodule ProblemsTest do
     r=goldbach(12)
     assert Enum.any?([{5,7},{7,5}], fn(a)-> a==r end)
   end
-  
+
+  test "truth table for and" do
+   expected=[
+     {true,true,true},
+     {true,false,false},
+     {false,true,false},
+     {false,false,false}
+   ]
+   assert truth_table(fn(a,b)->a and b end)==expected
+  end
+
+  test "truth table for non equality" do
+   expected=[
+     {true,true,false},
+     {true,false,true},
+     {false,true,true},
+     {false,false,false},
+   ]
+   assert truth_table(fn(a,b)->a != b end)==expected
+  end
+
+  test "gray code for n=1", do: assert gray(1)==["0","1"]
+  test "gray code for n=2", do: assert gray(2)==["00","01","11","10"]
+  test "gray code for n=3", do: assert gray(3)==["000","001","011","010","110","111","101","100"]
+
+  test "nil is tree", do: assert is_tree(nil)==true
+  test "one node is tree", do: assert is_tree({"A", nil, nil})==true
+  test "teo nodes are tree", do: assert is_tree({"A", {"A", nil, nil}, nil})==true
+  test "three nodes in line are tree", do: assert is_tree({"A", nil, {"A", nil, {"A", nil, nil}}})==true
+  test "three nodes are tree", do: assert is_tree({"A", {"B", nil, nil}, {"C", nil, nil}})==true
+  test "empty tuple not tree", do: assert is_tree({})==false
+  test "tree with empty tuple not tree", do: assert is_tree({"A", {"A", nil, {}}, nil})==false
+
+  test "nil is tree - tail call recursive", do: assert is_tree2(nil)==true
+  test "one node is tree - tail call recursive", do: assert is_tree2({"A", nil, nil})==true
+  test "teo nodes are tree - tail call recursive", do: assert is_tree2({"A", {"A", nil, nil}, nil})==true
+  test "three nodes in line are tree - tail call recursive", do: assert is_tree2({"A", nil, {"A", nil, {"A", nil, nil}}})==true
+  test "three nodes are tree - tail call recursive", do: assert is_tree2({"A", {"B", nil, nil}, {"C", nil, nil}})==true
+  test "empty tuple not tree - tail call recursive", do: assert is_tree2({})==false
+  test "tree with empty tuple not tree - tail call recursive", do: assert is_tree2({"A", {"A", nil, {}}, nil})==false
+
+  test "nil tree height", do: assert tree_height(nil)==0
+  test "one node tree height", do: assert tree_height({"A", nil, nil})==1
+  test "teo nodes tree height", do: assert tree_height({"A", {"A", nil, nil}, nil})==2
+  test "three nodes in line tree height", do: assert tree_height({"A", nil, {"A", nil, {"A", nil, nil}}})==3
+  test "three nodes tree height", do: assert tree_height({"A", {"B", nil, nil}, {"C", nil, nil}})==2
+
+  test "all balanaced trees with 0 nodes", do: assert cbal_trees(0)==[nil]
+  test "all balanaced trees with 1 node", do: assert cbal_trees(1)==[{:x,nil,nil}]
+  test "all balanaced trees with 2 nodes", do: assert cbal_trees(2)==[{:x,nil,{:x,nil,nil}},{:x,{:x,nil,nil},nil}]
+  test "all balanaced trees with 3 nodes", do: assert cbal_trees(3)==[{:x,{:x,nil,nil},{:x,nil,nil}}]
+
+  test "nil tree is symetric", do: assert is_symetric(nil)==true
+  test "one node tree is symetric", do: assert is_symetric({"A", nil, nil})==true
+  test "two nodes tree is not symetric", do: assert is_symetric({"A", {"A", nil, nil}, nil})==false
+  test "three nodes in line tree is not symetric", do: assert is_symetric({"A", nil, {"A", nil, {"A", nil, nil}}})==false
+  test "three nodes tree is symetric", do: assert is_symetric({"A", {"B", nil, nil}, {"C", nil, nil}})==true
+
+  test "nil tree is symetric - tail call recursive", do: assert is_symetric2(nil)==true
+  test "one node tree is symetric - tail call recursive", do: assert is_symetric2({"A", nil, nil})==true
+  test "two nodes tree is not symetric - tail call recursive", do: assert is_symetric2({"A", {"A", nil, nil}, nil})==false
+  test "three nodes in line tree is not symetric - tail call recursive", do: assert is_symetric2({"A", nil, {"A", nil, {"A", nil, nil}}})==false
+  test "three nodes tree is symetric - tail call recursive", do: assert is_symetric2({"A", {"B", nil, nil}, {"C", nil, nil}})==true
+
+  test "binary search tree for empty list", do: assert construct_bin_search([])==nil
+  test "binary search tree for list with 1 item", do: assert construct_bin_search([7])=={7,nil,nil}
+  test "binary search tree for list with 2 items", do: assert construct_bin_search([8,7])=={8,{7,nil,nil},nil}
+  test "binary search tree for list with 3 items", do: assert construct_bin_search([8,7,9])=={8,{7,nil,nil},{9,nil,nil}}
+  test "binary search tree for list with 5 items", do: assert construct_bin_search([1,2,3,4])=={1,nil,{2,nil,{3,nil,{4,nil,nil}}}}
+
+  test "all symetric trees with 0 nodes", do: assert sym_cbal_trees(0)==[nil]
+  test "all symetric trees with 1 node", do: assert sym_cbal_trees(1)==[{:x,nil,nil}]
+  test "all symetric trees with 2 nodes", do: assert sym_cbal_trees(2)==[]
+  test "all symetric trees with 3 nodes", do: assert sym_cbal_trees(3)==[{:x,{:x,nil,nil},{:x,nil,nil}}]
 end

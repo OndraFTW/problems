@@ -36,26 +36,26 @@ defmodule Problems do
             filter(tail, func, result)
         end
     end
-    
+
     # determines whether n is even
     defmacro is_even(n) do
         quote do: rem(unquote(n), 2)==0
     end
-    
+
     # determines if two lists are equal
     def list_equals([],[]), do: true
     def list_equals([_|_],[]), do: false
     def list_equals([],[_|_]), do: false
     def list_equals([head1|tail1],[head2|tail2]), do: head1==head2 and list_equals(tail1, tail2)
-    
+
     def list_of_lists_equals([],[]), do: true
     def list_of_lists_equals([_|_],[]), do: false
     def list_of_lists_equals([],[_|_]), do: false
     def list_of_lists_equals([head1|tail1],[head2|tail2]), do: list_equals(head1,head2) and list_of_lists_equals(tail1, tail2)
-    
+
     # determines if two lists are equal, ignores order of itema in lists
     def list_equals_ignore_order(list1,list2), do: list_equals(sort(list1), sort(list2))
-        
+
     # remove duplicate items from given list, the first occurence is retained
     def remove_duplicates(list), do: remove_duplicates(list, fn(a,b)-> a==b end)
     def remove_duplicates([], _func), do: []
@@ -63,11 +63,11 @@ defmodule Problems do
         tail=remove_duplicates(head, tail, func)
         [head|remove_duplicates(tail, func)]
     end
-    
+
     defp remove_duplicates(_item, [], _func), do: []
     defp remove_duplicates(item, [head|tail], func), do: if func.(item, head), do: remove_duplicates(item, tail, func), else: [head|remove_duplicates(item, tail, func)]
-    
-    # 01 get last element of list 
+
+    # 01 get last element of list
     def last([head]), do: head
     def last([_|tail]), do: last(tail)
 
@@ -92,7 +92,7 @@ defmodule Problems do
     # 06 find out whether is list palindrom
     def is_palindrom(list), do: is_palindrom([], list)
     defp is_palindrom(left, right) when length(left)==length(right), do: left==right
-    defp is_palindrom(left, [_|right]) when length(left)==length(right), do: left==right 
+    defp is_palindrom(left, [_|right]) when length(left)==length(right), do: left==right
     defp is_palindrom(left, [middle|right]), do: is_palindrom([middle|left], right)
 
     # 07 flatten list
@@ -118,10 +118,10 @@ defmodule Problems do
         do: pack(tail, [head], [[repetition_head|repetition_tail]|result])
 
     # 10 compress repeating elements into tuples {element, repetition}
-    def compress_pack(list), do: map(pack(list), fn([head|tail])-> {head, length(tail)+1} end) 
+    def compress_pack(list), do: map(pack(list), fn([head|tail])-> {head, length(tail)+1} end)
 
     # 11 compress repeating elements into tuples {element, repetition}, except for repetition 1
-    def compress_pack2(list), do: map(pack(list), fn([head|tail])-> compress_element(head, length(tail)+1) end) 
+    def compress_pack2(list), do: map(pack(list), fn([head|tail])-> compress_element(head, length(tail)+1) end)
 
     # 12 compress repeating elements into tuples {element, repetition}, except for repetition 1,
     # withou use of function pack/1
@@ -224,9 +224,6 @@ defmodule Problems do
     defp comb([], list, len), do: conmap(list, fn(e)-> comb([e], List.delete(list, e), len-1) end)
     defp comb(object, list, len), do: conmap(list, fn(e)-> comb([e|object], List.delete(list, e), len-1) end)
 
-    #NOTE 27, 28 don't work - groups {0, 1} and {1, 0} are different but should be same
-    #tests skipped
-
     # 27 divide people into groups of 2, 3 and 4
     def group234(people) when length(people)==9, do: map(all_permutations(people), fn(e)-> groupify(e, [2,3,4]) end)
 
@@ -273,13 +270,13 @@ defmodule Problems do
     def gcd(a, b), do: gcd(b, rem(a, b))
 
     # 33 determine whether numbers a and b are coprimes
-    def coprimes(a, b), do: gcd(a, b)==1 
+    def coprimes(a, b), do: gcd(a, b)==1
 
     # 34 implement Euler's totient function
     def totient_phi(1), do: 1
     def totient_phi(number) when number>1, do: totient_phi(range(0, number), number, 0)
     defp totient_phi([], _, result), do: result
-    defp totient_phi([head|tail], number, result) do 
+    defp totient_phi([head|tail], number, result) do
         if coprimes(head, number) do
             totient_phi(tail, number, result+1)
         else
@@ -366,7 +363,7 @@ defmodule Problems do
     defp range_even(a, b, result), do: range_even(a+2, b, [a|result])
 
     # 46 get truth table to given function func
-    def table2(func) do
+    def truth_table(func) do
         [{true, true, func.(true, true)},
         {true, false, func.(true, false)},
         {false, true, func.(false, true)},
@@ -400,7 +397,7 @@ defmodule Problems do
 
     # 54 height of tree
     def tree_height(nil), do: 0
-    def tree_height({_data, nil, nil}), do: 0
+    def tree_height({_data, nil, nil}), do: 1
     def tree_height({_data, left, right}), do: max(tree_height(left), tree_height(right))+1
 
     # 55 construct all completely balanced trees with n nodes
@@ -409,17 +406,17 @@ defmodule Problems do
     def cbal_trees(n) when n>1 do
         if is_even(n-1) do
             trees=cbal_trees(div(n-1,2))
-            construct_trees trees, trees
+            construct_trees(trees, trees)
         else
             trees0=cbal_trees(div(n-1,2))
             trees1=cbal_trees(div(n-1,2)+1)
             construct_trees(trees0, trees1)++construct_trees(trees1, trees0)
         end
     end
-    
-    # constructs all trees with left subtree from left_subtrees ans right subtree from right_subtrees
-    def construct_trees(left_subtrees, right_subtrees),
-        do: conmap(left_subtrees, fn(left)-> map(right_subtrees, {:x, left, fn(x)-> x end}) end)
+
+    # constructs all trees with left subtree from left_subtrees and right subtree from right_subtrees
+    defp construct_trees(left_subtrees, right_subtrees),
+        do: conmap(left_subtrees, fn(left)-> map(right_subtrees, fn(x)-> {:x, left, x}end) end)
 
     # 56 determine whether tree is symetric
     def is_symetric(nil), do: true
@@ -438,10 +435,10 @@ defmodule Problems do
     defp mirror2(_, _), do: false
 
     # 57 construct binary search tree from list
-    def construct([]), do: nil
-    def construct([head|tail]), do: construct(tail, {head, nil, nil})
-    defp construct([], tree), do: tree
-    defp construct([head|tail], tree), do: construct(tail, add_node_to_tree(tree, head))
+    def construct_bin_search([]), do: nil
+    def construct_bin_search([head|tail]), do: construct_bin_search(tail, {head, nil, nil})
+    defp construct_bin_search([], tree), do: tree
+    defp construct_bin_search([head|tail], tree), do: construct_bin_search(tail, add_node_to_tree(tree, head))
 
     defp add_node_to_tree(nil, node), do: {node, nil, nil}
     defp add_node_to_tree({n, left, right}, node) when node<=n, do: {n, add_node_to_tree(left, node), right}
@@ -627,7 +624,7 @@ defmodule Problems do
 
     # 67 add layout to binary tree
     # picture:
-    #   0 1 2 3 4 5 6 
+    #   0 1 2 3 4 5 6
     # 0       a
     #       /   \
     # 1   b       c
@@ -648,7 +645,7 @@ defmodule Problems do
     defp tree_width(height), do: tree_width(height, 1)
     defp tree_width(0, n), do: n
     defp tree_width(h, n), do: tree_width(h-1, n+pow(2, h))
-    
+
     # 74 generate all binary trees with n nodes
     def trees(0), do: [nil]
     def trees(n) when n>0 do
@@ -683,7 +680,7 @@ defmodule Problems do
         get_new_nodes_paths right, [:r|path], result2
     end
 
-    # concatenates two lists and eliminates values that are in both lists 
+    # concatenates two lists and eliminates values that are in both lists
     def unique_concatenation(list1, []), do: list1
     def unique_concatenation(list1, [head|tail]), do: unique_concatenation(add_if_unique(list1, head), tail)
 
