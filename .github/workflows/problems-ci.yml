@@ -16,6 +16,8 @@ jobs:
           path: |
             deps
             _build
+            lib
+            test
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - run: echo ${{ steps.problems-cache.outputs.cache-hit }}
@@ -39,10 +41,11 @@ jobs:
           path: |
             deps
             _build
+            lib
+            test
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
       - run: echo ${{ steps.problems-cache.outputs.cache-hit }}
-      - uses: actions/checkout@v3.3.0
       - uses: erlef/setup-beam@v1
         with:
           otp-version: 25
