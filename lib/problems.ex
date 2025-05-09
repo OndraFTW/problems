@@ -41,7 +41,32 @@ defmodule Problems do
     defmacro is_even(n) do
         quote do: rem(unquote(n), 2)==0
     end
-
+    
+    # determines if two lists are equal
+    def list_equals([],[]), do: true
+    def list_equals([_|_],[]), do: false
+    def list_equals([],[_|_]), do: false
+    def list_equals([head1|tail1],[head2|tail2]), do: head1==head2 and list_equals(tail1, tail2)
+    
+    def list_of_lists_equals([],[]), do: true
+    def list_of_lists_equals([_|_],[]), do: false
+    def list_of_lists_equals([],[_|_]), do: false
+    def list_of_lists_equals([head1|tail1],[head2|tail2]), do: list_equals(head1,head2) and list_of_lists_equals(tail1, tail2)
+    
+    # determines if two lists are equal, ignores order of itema in lists
+    def list_equals_ignore_order(list1,list2), do: list_equals(sort(list1), sort(list2))
+        
+    # remove duplicate items from given list, the first occurence is retained
+    def remove_duplicates(list), do: remove_duplicates(list, fn(a,b)-> a==b end)
+    def remove_duplicates([], _func), do: []
+    def remove_duplicates([head|tail], func) do
+        tail=remove_duplicates(head, tail, func)
+        [head|remove_duplicates(tail, func)]
+    end
+    
+    defp remove_duplicates(_item, [], _func), do: []
+    defp remove_duplicates(item, [head|tail], func), do: if func.(item, head), do: remove_duplicates(item, tail, func), else: [head|remove_duplicates(item, tail, func)]
+    
     # 01 get last element of list 
     def last([head]), do: head
     def last([_|tail]), do: last(tail)
@@ -206,13 +231,16 @@ defmodule Problems do
     def group234(people) when length(people)==9, do: map(all_permutations(people), fn(e)-> groupify(e, [2,3,4]) end)
 
     # 28 divide people into groups
-    def group(people, groups), do: map(all_permutations(people), fn(e)-> groupify(e, groups) end)
+    def group(people, groups) do
+        groups=map(all_permutations(people), fn(e)-> groupify(e, groups) end)
+        remove_duplicates(groups, &list_of_lists_equals/2)
+    end
 
     defp groupify(people, groups), do: groupify(people, groups, [])
     defp groupify([], [], result), do: reverse(result)
     defp groupify(people, [head|tail], result) do
         {group, others}=split(people, head)
-        groupify(others, tail, [group|result])
+        groupify(others, tail, [sort(group)|result])
     end
 
     defp all_permutations(list), do: all_permutations([], list)

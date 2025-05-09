@@ -35,7 +35,50 @@ defmodule ProblemsTest do
   test "is 4 even", do: assert is_even(4)
   test "is -2 even", do: assert is_even(-2)
   test "is 1 even", do: assert not is_even(1)
-
+  
+  test "empty lists are equal", do: assert list_equals([],[])
+  test "one item equal lists are equal", do: assert list_equals([55],[55])
+  test "longer equal lists are equal", do: assert list_equals([7,8,9],[7,8,9])
+  test "non empty and empty lists are not equal", do: assert not list_equals([12],[])
+  test "empty and non empty lists are not equal", do: assert not list_equals([],[13,14])
+  test "lists with different order are not equal", do: assert not list_equals([14,15,13],[13,14,15])
+  
+  test "empty lists are equal ignoring order", do: assert list_equals_ignore_order([],[])
+  test "one item equal lists are equal ignoring order", do: assert list_equals_ignore_order([55],[55])
+  test "longer equal lists are equal ignoring order", do: assert list_equals_ignore_order([7,8,9],[7,8,9])
+  test "non empty and empty lists are not equal ignoring order", do: assert not list_equals_ignore_order([12],[])
+  test "empty and non empty lists are not equal ignoring order", do: assert not list_equals_ignore_order([],[13,14])
+  test "lists with different order are equal ignoring order", do: assert list_equals_ignore_order([14,15,13],[13,14,15])
+  
+  test "empty list has no duplicates", do: assert remove_duplicates([])==[]
+  test "one item list has no duplicates", do: assert remove_duplicates([99])==[99]
+  test "list has no duplicates", do: assert remove_duplicates([7,8,9])==[7,8,9]
+  test "list has duplicates next to each other", do: assert remove_duplicates([7,7,8,9])==[7,8,9]
+  test "list has duplicates on oposite ends of list", do: assert remove_duplicates([7,8,9,8])==[7,8,9]
+  test "list has duplicates of every item", do: assert remove_duplicates([7,9,8,9,7,8])==[7,9,8]
+  test "list has many duplicates of every item", do: assert remove_duplicates([7,9,9,8,9,9,7,8,9,7,8])==[7,9,8]
+  test "list has only duplicates", do: assert remove_duplicates([4,4,4,4,4,4,4,4,4])==[4]
+  
+ test "remove duplicates from list of lists" do
+      input=[
+      [["aldo","david"],["evi","carla","beat"],["gary","hugo","ida","flip"]],
+      [["david","flip"],["evi","carla","beat"],["gary","hugo","aldo","ida"]],
+      [["david","flip"],["evi","carla","gary"],["beat","hugo","aldo","ida"]],
+      [["david","evi"],["flip","carla","gary"],["beat","hugo","aldo","ida"]],
+      [["aldo","david"],["evi","carla","beat"],["gary","hugo","ida","flip"]],
+      [["david","flip"],["evi","carla","beat"],["gary","hugo","aldo","ida"]],
+      [["david","flip"],["evi","carla","gary"],["beat","hugo","aldo","ida"]],
+      [["david","evi"],["flip","carla","gary"],["beat","hugo","aldo","ida"]]
+      ]
+      expected=[
+      [["aldo","david"],["evi","carla","beat"],["gary","hugo","ida","flip"]],
+      [["david","flip"],["evi","carla","beat"],["gary","hugo","aldo","ida"]],
+      [["david","flip"],["evi","carla","gary"],["beat","hugo","aldo","ida"]],
+      [["david","evi"],["flip","carla","gary"],["beat","hugo","aldo","ida"]]
+      ]
+      assert remove_duplicates(input, &list_of_lists_equals/2)==expected
+  end
+  
   test "last of empty list", do: assert catch_error(last([]))==:function_clause
   test "last of one", do: assert last([1])==1
   test "last of list", do: assert last([1,2,3])==3
@@ -221,6 +264,22 @@ defmodule ProblemsTest do
   test "all combinations of length -1", do: assert catch_error(combinations([1,2,3],-1))==:function_clause
   test "all combinations of length 1 from empty list", do: assert catch_error(combinations([], 1))==:function_clause
 
+  test "divide group of 2 to groups of 2 and 3 items" do
+    expected=[
+      [["carla","david"],["aldo","beat","evi"]],
+      [["beat","david"],["aldo","carla","evi"]],
+      [["beat","carla"],["aldo","david","evi"]],
+      [["carla","evi"],["aldo","beat","david"]],
+      [["beat","evi"],["aldo","carla","david"]],
+      [["david","evi"],["aldo","beat","carla"]],
+      [["aldo","david"],["beat","carla","evi"]],
+      [["aldo","carla"],["beat","david","evi"]],
+      [["aldo","evi"],["beat","carla","david"]],
+      [["aldo","beat"],["carla","david","evi"]]
+    ]
+    assert group(["aldo","beat","carla","david","evi"], [2,3])==expected
+  end
+  
   test "sort empty list of lists according to length", do: assert lsort([])==[]
   test "sort list of one empty list according to length", do: assert lsort([[]])==[[]]
   test "sort list of one list according to length", do: assert lsort([[0]])==[[0]]
