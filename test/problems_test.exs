@@ -517,4 +517,97 @@ defmodule ProblemsTest do
   test "three nodes tree internals - tail call recursive", do: assert internals2({"A", {"B", nil, nil}, {"C", nil, nil}})==["A"]
   test "five nodes tree internals - tail call recursive", do: assert internals2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}})==["A","C"]
 
+  test "nodes of nil tree at level 0", do: assert at_level(nil,0)==[]
+  test "nodes of one node tree at level 0", do: assert at_level({"A", nil, nil},0)==["A"]
+
+  test "nodes of nil tree at level 1", do: assert at_level(nil,1)==[]
+  test "nodes of one node tree at level 1", do: assert at_level({"A", nil, nil},1)==[]
+  test "nodes of two nodes tree at level 1", do: assert at_level({"A", {"B", nil, nil}, nil},1)==["B"]
+  test "nodes of three nodes in line tree at level 1", do: assert at_level({"A", nil, {"B", nil, {"C", nil, nil}}},1)==["B"]
+  test "nodes of three nodes tree at level 1", do: assert at_level({"A", {"B", nil, nil}, {"C", nil, nil}},1)==["B","C"]
+  test "nodes of five nodes tree at level 1", do: assert at_level({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},1)==["B","C"]
+
+  test "nodes of nil tree at level 2", do: assert at_level(nil,2)==[]
+  test "nodes of one node tree at level 2", do: assert at_level({"A", nil, nil},2)==[]
+  test "nodes of two nodes tree at level 2", do: assert at_level({"A", {"B", nil, nil}, nil},2)==[]
+  test "nodes of three nodes in line tree at level 2", do: assert at_level({"A", nil, {"B", nil, {"C", nil, nil}}},2)==["C"]
+  test "nodes of three nodes tree at level 2", do: assert at_level({"A", {"B", nil, nil}, {"C", nil, nil}},2)==[]
+  test "nodes of five nodes tree at level 2", do: assert at_level({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},2)==["D","E"]
+
+  test "nodes of nil tree at level 10", do: assert at_level(nil,10)==[]
+  test "nodes of one node tree at level 10", do: assert at_level({"A", nil, nil},10)==[]
+  test "nodes of two nodes tree at level 10", do: assert at_level({"A", {"B", nil, nil}, nil},10)==[]
+  test "nodes of three nodes in line tree at level 10", do: assert at_level({"A", nil, {"B", nil, {"C", nil, nil}}},10)==[]
+  test "nodes of three nodes tree at level 10", do: assert at_level({"A", {"B", nil, nil}, {"C", nil, nil}},10)==[]
+  test "nodes of five nodes tree at level 10", do: assert at_level({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},10)==[]
+
+  test "nodes of nil tree at level 0 - tail call recursive", do: assert at_level2(nil,0)==[]
+  test "nodes of one node tree at level 0 - tail call recursive", do: assert at_level2({"A", nil, nil},0)==["A"]
+
+  test "nodes of nil tree at level 1 - tail call recursive", do: assert at_level2(nil,1)==[]
+  test "nodes of one node tree at level 1 - tail call recursive", do: assert at_level2({"A", nil, nil},1)==[]
+  test "nodes of two nodes tree at level 1 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, nil},1)==["B"]
+  test "nodes of three nodes in line tree at level 1 - tail call recursive", do: assert at_level2({"A", nil, {"B", nil, {"C", nil, nil}}},1)==["B"]
+  test "nodes of three nodes tree at level 1 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", nil, nil}},1)==["B","C"]
+  test "nodes of five nodes tree at level 1 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},1)==["B","C"]
+
+  test "nodes of nil tree at level 2 - tail call recursive", do: assert at_level2(nil,2)==[]
+  test "nodes of one node tree at level 2 - tail call recursive", do: assert at_level2({"A", nil, nil},2)==[]
+  test "nodes of two nodes tree at level 2 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, nil},2)==[]
+  test "nodes of three nodes in line tree at level 2 - tail call recursive", do: assert at_level2({"A", nil, {"B", nil, {"C", nil, nil}}},2)==["C"]
+  test "nodes of three nodes tree at level 2 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", nil, nil}},2)==[]
+  test "nodes of five nodes tree at level 2 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},2)==["D","E"]
+
+  test "nodes of nil tree at level 10 - tail call recursive", do: assert at_level2(nil,10)==[]
+  test "nodes of one node tree at level 10 - tail call recursive", do: assert at_level2({"A", nil, nil},10)==[]
+  test "nodes of two nodes tree at level 10 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, nil},10)==[]
+  test "nodes of three nodes in line tree at level 10 - tail call recursive", do: assert at_level2({"A", nil, {"B", nil, {"C", nil, nil}}},10)==[]
+  test "nodes of three nodes tree at level 10 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", nil, nil}},10)==[]
+  test "nodes of five nodes tree at level 10 - tail call recursive", do: assert at_level2({"A", {"B", nil, nil}, {"C", {"D", nil, nil}, {"E", nil, nil}}},10)==[]
+
+  test "complete tree with 0 nodes", do: assert complete_tree(0)==nil
+  test "complete tree with 1 node", do: assert complete_tree(1)=={:x,nil,nil}
+  test "complete tree with 2 nodes", do: assert complete_tree(2)=={:x,{:x,nil,nil},nil}
+  test "complete tree with 3 nodes", do: assert complete_tree(3)=={:x,{:x,nil,nil},{:x,nil,nil}}
+  test "complete tree with 4 nodes", do: assert complete_tree(4)=={:x,{:x,{:x,nil,nil},nil},{:x,nil,nil}}
+  test "complete tree with 5 nodes", do: assert complete_tree(5)=={:x,{:x,{:x,nil,nil},{:x,nil,nil}},{:x,nil,nil}}
+  test "complete tree with 6 nodes", do: assert complete_tree(6)=={:x,{:x,{:x,nil,nil},{:x,nil,nil}},{:x,{:x,nil,nil},nil}}
+  test "complete tree with 7 nodes", do: assert complete_tree(7)=={:x,{:x,{:x,nil,nil},{:x,nil,nil}},{:x,{:x,nil,nil},{:x,nil,nil}}}
+
+  test "zero node tree layout", do: assert layout(nil)==nil
+  test "one node tree layout", do: assert layout({:a, nil, nil})=={:a, {0, 0}, nil, nil}
+  test "two node tree layout left", do: assert layout({:a, {:b, nil, nil}, nil})=={:a, {1, 0}, {:b, {0, 1}, nil, nil}, nil}
+  test "two node tree layout right", do: assert layout({:a, nil, {:b, nil, nil}})=={:a, {0, 0}, nil, {:b, {1, 1}, nil, nil}}
+  test "three node tree layout balanaced", do: assert layout({:a, {:b, nil, nil}, {:c, nil, nil}})=={:a, {1, 0}, {:b, {0, 1}, nil, nil}, {:c, {2, 1}, nil, nil}}
+  test "three node tree layout left", do: assert layout({:a, {:b, {:c, nil, nil}, nil}, nil})=={:a, {2, 0}, {:b, {1, 1}, {:c, {0, 2}, nil, nil}, nil}, nil}
+  test "three node tree layout right", do: assert layout({:a, nil, {:b, nil, {:c, nil, nil}}})=={:a, {0, 0}, nil, {:b, {1, 1}, nil, {:c, {2, 2}, nil, nil}}}
+  test "three node tree layout left right", do: assert layout({:a, {:b, nil, {:c, nil, nil}}, nil})=={:a, {2, 0}, {:b, {0, 1}, nil, {:c, {1, 2}, nil, nil}}, nil}
+  test "three node tree layout right left", do: assert layout({:a, nil, {:b, {:c, nil, nil}, nil}})=={:a, {0, 0}, nil, {:b, {2, 1}, {:c, {1, 2}, nil, nil}, nil}}
+  test "tree layout example", do: assert layout({:a, {:b, nil, nil}, {:c, {:d, nil, nil}, nil}})=={:a, {1, 0}, {:b, {0, 1}, nil, nil}, {:c, {3, 1}, {:d, {2, 2}, nil, nil}, nil}}
+
+  test "zero node tree layout2", do: assert layout2(nil)==nil
+  test "one node tree layout2", do: assert layout2({:a, nil, nil})=={:a, {0, 0}, nil, nil}
+  test "two node tree layout2 left", do: assert layout2({:a, {:b, nil, nil}, nil})=={:a, {1, 0}, {:b, {0, 1}, nil, nil}, nil}
+  test "two node tree layout2 right", do: assert layout2({:a, nil, {:b, nil, nil}})=={:a, {1, 0}, nil, {:b, {2, 1}, nil, nil}}
+  test "three node tree layout2 balanaced", do: assert layout2({:a, {:b, nil, nil}, {:c, nil, nil}})=={:a, {1, 0}, {:b, {0, 1}, nil, nil}, {:c, {2, 1}, nil, nil}}
+  test "three node tree layout2 left", do: assert layout2({:a, {:b, {:c, nil, nil}, nil}, nil})=={:a, {3, 0}, {:b, {1, 1}, {:c, {0, 2}, nil, nil}, nil}, nil}
+  test "three node tree layout2 right", do: assert layout2({:a, nil, {:b, nil, {:c, nil, nil}}})=={:a, {3, 0}, nil, {:b, {5, 1}, nil, {:c, {6, 2}, nil, nil}}}
+  test "three node tree layout2 left right", do: assert layout2({:a, {:b, nil, {:c, nil, nil}}, nil})=={:a, {3, 0}, {:b, {1, 1}, nil, {:c, {2, 2}, nil, nil}}, nil}
+  test "three node tree layout2 right left", do: assert layout2({:a, nil, {:b, {:c, nil, nil}, nil}})=={:a, {3, 0}, nil, {:b, {5, 1}, {:c, {4, 2}, nil, nil}, nil}}
+  test "tree layout2 example", do: assert layout2({:a, {:b, nil, nil}, {:c, {:d, nil, nil}, nil}})=={:a, {3, 0}, {:b, {1, 1}, nil, nil}, {:c, {5, 1}, {:d, {4, 2}, nil, nil}, nil}}
+
+  test "all trees with 0 nodes", do: assert all_trees(0)==[nil]
+  test "all trees with 1 node", do: assert all_trees(1)==[{:x, nil, nil}]
+  test "all trees with 2 nodes", do: assert all_trees(2)==[{:x, nil, {:x, nil, nil}},{:x, {:x, nil, nil}, nil}]
+  test "all trees with 3 nodes" do
+    expected=[
+      {:x, nil, {:x, nil, {:x, nil, nil}}},
+      {:x, nil, {:x, {:x, nil, nil}, nil}},
+      {:x, {:x, nil, nil}, {:x, nil, nil}},
+      {:x, {:x, nil, {:x, nil, nil}}, nil},
+      {:x, {:x, {:x, nil, nil}, nil}, nil}
+    ]
+    assert all_trees(3)==expected
+  end
+
 end
