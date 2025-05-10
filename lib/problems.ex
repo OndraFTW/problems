@@ -565,21 +565,21 @@ defmodule Problems do
 
     # 64 collect all nodes at level
     def at_level(nil, _n), do: []
-    def at_level(tree, 0), do: [tree]
+    def at_level({data, _, _}, 0), do: [data]
     def at_level({_data, left, right}, n) when n>0, do: at_level(left, n-1)++at_level(right, n-1)
 
     # tail-call recursive
-    def at_level2(tree, n), do: at_level22([{tree, n}], [])
+    def at_level2(tree, n), do: reverse(at_level22([{tree, n}], []))
     defp at_level22([], result), do: result
     defp at_level22([{nil, _n}|tail], result), do: at_level22(tail, result)
-    defp at_level22([{node, 0}|tail], result), do: at_level22(tail, [node|result])
+    defp at_level22([{{data, _, _}, 0}|tail], result), do: at_level22(tail, [data|result])
     defp at_level22([{{_data, left, right}, n}|tail], result), do: at_level22([{left, n-1}, {right, n-1}|tail], result)
 
     # 65 construct complete binary tree with n nodes
     def complete_tree(0), do: nil
     def complete_tree(n) do
         {left, right}=split_number_of_nodes(n-1)
-        {0, complete_tree(left), complete_tree(right)}
+        {:x, complete_tree(left), complete_tree(right)}
     end
 
     # returns number of nodes of left and right subtree of complete tree
@@ -647,9 +647,9 @@ defmodule Problems do
     defp tree_width(h, n), do: tree_width(h-1, n+pow(2, h))
 
     # 74 generate all binary trees with n nodes
-    def trees(0), do: [nil]
-    def trees(n) when n>0 do
-        uconmap(trees(n-1), fn(x)->get_one_node_plus_trees(x)end)
+    def all_trees(0), do: [nil]
+    def all_trees(n) when n>0 do
+        uconmap(all_trees(n-1), fn(x)->get_one_node_plus_trees(x)end)
     end
 
     # returns all trees created by adding one node to tree
@@ -657,7 +657,7 @@ defmodule Problems do
         do: map(get_new_nodes_paths(tree), fn(path)-> apply_new_node_path_on_tree(tree, path) end)
 
     # add node to tree according to new node path
-    def apply_new_node_path_on_tree(nil, []), do: {:a, nil, nil}
+    def apply_new_node_path_on_tree(nil, []), do: {:x, nil, nil}
     def apply_new_node_path_on_tree({a, left, right}, [head|tail]) do
         if head == :l do
             {a, apply_new_node_path_on_tree(left, tail), right}
